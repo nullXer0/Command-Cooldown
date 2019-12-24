@@ -1,0 +1,16 @@
+Messages:
+    CooldownMsg: "&a&l[COMMAND COOLDOWN] &7You still have %time% remaining."
+    NotifyConsole: "&a&l[COMMAND COOLDOWN] &7%player% tried to use that command with %time% left!"
+    DoesNotExist: "&a&l[COMMAND COOLDOWN] &7That command cooldown does not exist."
+    DeleteSuccessful: "&a&l[COMMAND COOLDOWN] &7Deleted successfully"
+    CreationSuccessful: "&a&l[COMMAND COOLDOWN] &7Created successfully"
+    NotNumber: "&a&l[COMMAND COOLDOWN] &7Use a number for the cooldown"
+    NoCommands: "&a&l[COMMAND COOLDOWN] &7There are no commands with cooldowns"
+tpa:
+  aliases:
+  - etpa
+  - tpahere
+  cooldown: 60
+gmc:
+  aliases: []
+  cooldown: 50

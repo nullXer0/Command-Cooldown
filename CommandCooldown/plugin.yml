@@ -1,0 +1,10 @@
+name: Command Cooldown
+main: me.Darrionat.CommandCooldown.Main
+description: An easy way to add cooldowns to commands
+version: 1.1
+api-version: 1.15
+
+commands:
+  commandcooldown:
+    aliases: [cc, commandcd, cmdcd]
+    usage: </command> <help/list/add/remove>
