@@ -8,3 +8,12 @@ commands:
   commandcooldown:
     aliases: [cc, commandcd, cmdcd]
     usage: </command> <help/list/add/remove>
+    
+permissions:
+  commandcooldown.*:
+    description: Gives access to all CC commands
+    children:
+      commandcooldown.admin: true
+  commandcooldown.admin:
+    description: Allows a player to add/remove cooldowns
+    default: op

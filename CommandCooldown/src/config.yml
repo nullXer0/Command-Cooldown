@@ -6,6 +6,7 @@ Messages:
     CreationSuccessful: "&a&l[COMMAND COOLDOWN] &7Created successfully"
     NotNumber: "&a&l[COMMAND COOLDOWN] &7Use a number for the cooldown"
     NoCommands: "&a&l[COMMAND COOLDOWN] &7There are no commands with cooldowns"
+    NoPermission: "&a&l[COMMAND COOLDOWN] &7You do not have the permission '%perm%'"
 tpa:
   aliases:
   - etpa

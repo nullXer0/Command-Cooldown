@@ -8,6 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import me.Darrionat.CommandCooldown.Main;
 import me.Darrionat.CommandCooldown.Utils.Utils;
@@ -25,6 +26,15 @@ public class CommandControl implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		FileConfiguration config = plugin.getConfig();
+
+		if (sender instanceof Player) {
+			Player p = (Player) sender;
+			if (!p.hasPermission("commandcooldown.admin")) {
+				p.sendMessage(Utils
+						.chat(config.getString("Messages.NoPermission").replace("%perm%", "commandcooldown.admin")));
+				return true;
+			}
+		}
 
 		if (args.length == 0) {
 			sender.sendMessage(Utils.chat("&a&lCOMMAND COOLDOWN v" + plugin.getDescription().getVersion()));
