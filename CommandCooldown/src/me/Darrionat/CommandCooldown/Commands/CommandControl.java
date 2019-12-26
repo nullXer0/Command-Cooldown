@@ -46,6 +46,8 @@ public class CommandControl implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("help")) {
 			sender.sendMessage(Utils.chat("&a&lCOMMAND COOLDOWN - USAGE"));
 			sender.sendMessage(Utils.chat("  &7/" + label + " list"));
+			sender.sendMessage(Utils.chat("  &7/" + label + " bypass"));
+			sender.sendMessage(Utils.chat("  &7/" + label + " reload"));
 			sender.sendMessage(Utils.chat("  &7/" + label + " add command cooldown alias1 alias2 alias3..."));
 			sender.sendMessage(Utils.chat("  &7/" + label + " remove command"));
 			return true;
@@ -54,7 +56,9 @@ public class CommandControl implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("list")) {
 			List<String> list = new ArrayList<String>();
 			for (String key : config.getKeys(false)) {
-				if (key.equalsIgnoreCase("Messages")) {
+
+				if (key.equalsIgnoreCase("Messages") || key.equalsIgnoreCase("checkUpdates")
+						|| key.equalsIgnoreCase("SendBypassMessage")) {
 					continue;
 				}
 
@@ -80,6 +84,7 @@ public class CommandControl implements CommandExecutor {
 			}
 			return true;
 		}
+
 		// /cc remove command
 		if (args[0].equalsIgnoreCase("remove")) {
 			if (args.length != 2) {
@@ -133,6 +138,30 @@ public class CommandControl implements CommandExecutor {
 			plugin.saveConfig();
 			sender.sendMessage(Utils.chat(config.getString("Messages.CreationSuccessful")));
 			return true;
+		}
+		if (args[0].equalsIgnoreCase("reload")) {
+			plugin.reloadConfig();
+			sender.sendMessage(Utils.chat(config.getString("Messages.ReloadSuccessful")));
+			return true;
+		}
+		if (args[0].equalsIgnoreCase("bypass")) {
+			if (!(sender instanceof Player)) {
+				sender.sendMessage(Utils.chat(config.getString("Messages.NotAPlayer")));
+				return true;
+			}
+			Player p = (Player) sender;
+			String name = p.getName();
+			ArrayList<String> bypassList = Utils.getBypassList();
+
+			if (bypassList.contains(name)) {
+				p.sendMessage(Utils.chat(config.getString("Messages.BypassOff")));
+				bypassList.remove(name);
+				return true;
+			}
+			p.sendMessage(Utils.chat(config.getString("Messages.BypassOn")));
+			bypassList.add(name);
+			return true;
+
 		}
 
 		// At the end, so if none of the conditions are met, it will send this message.

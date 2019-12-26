@@ -1,5 +1,6 @@
 package me.Darrionat.CommandCooldown.Listeners;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,15 +30,27 @@ public class CommandProcess implements Listener {
 	public void commandSent(PlayerCommandPreprocessEvent e) {
 		Player p = e.getPlayer();
 		String sentcommand = e.getMessage().replace("/", "");
-
 		FileConfiguration config = plugin.getConfig();
+
+		ArrayList<String> bypassList = Utils.getBypassList();
+		if (bypassList.contains(p.getName())) {
+			if (config.getBoolean("SendBypassMessage") == true) {
+				p.sendMessage(Utils.chat(config.getString("Messages.BypassMessage")));
+			}
+			return;
+		}
+
 		for (String key : config.getKeys(false)) {
 
-			if (key.equalsIgnoreCase("Messages")) {
+			if (key.equalsIgnoreCase("Messages") || key.equalsIgnoreCase("checkUpdates")
+					|| key.equalsIgnoreCase("SendBypassMessage")) {
 				continue;
 			}
+
+			// Check to see if the command is equal to any of the aliases
 			if (!sentcommand.equalsIgnoreCase(key)) {
 				ConfigurationSection section = config.getConfigurationSection(key);
+
 				List<String> list = section.getStringList("aliases");
 				for (String s : list) {
 					if (!s.equalsIgnoreCase(sentcommand)) {
@@ -51,6 +64,7 @@ public class CommandProcess implements Listener {
 				}
 				continue;
 			}
+
 			ConfigurationSection section = config.getConfigurationSection(key);
 			int cooldown = section.getInt("cooldown");
 			if (addCooldown(p, config, key, cooldown) == true) {
