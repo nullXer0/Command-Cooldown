@@ -33,12 +33,6 @@ public class CommandProcess implements Listener {
 		FileConfiguration config = plugin.getConfig();
 
 		ArrayList<String> bypassList = Utils.getBypassList();
-		if (bypassList.contains(p.getName())) {
-			if (config.getBoolean("SendBypassMessage") == true) {
-				p.sendMessage(Utils.chat(config.getString("Messages.BypassMessage")));
-			}
-			return;
-		}
 
 		for (String key : config.getKeys(false)) {
 
@@ -56,6 +50,12 @@ public class CommandProcess implements Listener {
 					if (!s.equalsIgnoreCase(sentcommand)) {
 						continue;
 					}
+					if (bypassList.contains(p.getName())) {
+						if (config.getBoolean("SendBypassMessage") == true) {
+							p.sendMessage(Utils.chat(config.getString("Messages.BypassMessage")));
+						}
+						return;
+					}
 					int cooldown = section.getInt("cooldown");
 					if (addCooldown(p, config, key, cooldown) == true) {
 						e.setCancelled(true);
@@ -64,9 +64,16 @@ public class CommandProcess implements Listener {
 				}
 				continue;
 			}
-
+			
+			if (bypassList.contains(p.getName())) {
+				if (config.getBoolean("SendBypassMessage") == true) {
+					p.sendMessage(Utils.chat(config.getString("Messages.BypassMessage")));
+				}
+				return;
+			}
 			ConfigurationSection section = config.getConfigurationSection(key);
 			int cooldown = section.getInt("cooldown");
+
 			if (addCooldown(p, config, key, cooldown) == true) {
 				e.setCancelled(true);
 			}

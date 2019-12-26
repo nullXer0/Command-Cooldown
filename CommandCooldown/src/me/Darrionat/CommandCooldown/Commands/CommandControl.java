@@ -144,6 +144,7 @@ public class CommandControl implements CommandExecutor {
 			sender.sendMessage(Utils.chat(config.getString("Messages.ReloadSuccessful")));
 			return true;
 		}
+		
 		if (args[0].equalsIgnoreCase("bypass")) {
 			if (!(sender instanceof Player)) {
 				sender.sendMessage(Utils.chat(config.getString("Messages.NotAPlayer")));
