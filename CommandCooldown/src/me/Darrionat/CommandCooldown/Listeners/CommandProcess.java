@@ -30,6 +30,13 @@ public class CommandProcess implements Listener {
 	public void commandSent(PlayerCommandPreprocessEvent e) {
 		Player p = e.getPlayer();
 		String sentcommand = e.getMessage().replace("/", "");
+		int i = sentcommand.indexOf(' ');
+		String label;
+		try {
+			label = sentcommand.substring(0, i);
+		} catch (StringIndexOutOfBoundsException exe) {
+			label = sentcommand;
+		}
 		FileConfiguration config = plugin.getConfig();
 
 		ArrayList<String> bypassList = Utils.getBypassList();
@@ -42,12 +49,12 @@ public class CommandProcess implements Listener {
 			}
 
 			// Check to see if the command is equal to any of the aliases
-			if (!sentcommand.equalsIgnoreCase(key)) {
+			if (!label.equalsIgnoreCase(key)) {
 				ConfigurationSection section = config.getConfigurationSection(key);
 
 				List<String> list = section.getStringList("aliases");
 				for (String s : list) {
-					if (!s.equalsIgnoreCase(sentcommand)) {
+					if (!s.equalsIgnoreCase(label)) {
 						continue;
 					}
 					if (bypassList.contains(p.getName())) {
@@ -64,7 +71,7 @@ public class CommandProcess implements Listener {
 				}
 				continue;
 			}
-			
+
 			if (bypassList.contains(p.getName())) {
 				if (config.getBoolean("SendBypassMessage") == true) {
 					p.sendMessage(Utils.chat(config.getString("Messages.BypassMessage")));
