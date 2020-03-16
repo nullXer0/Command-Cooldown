@@ -100,38 +100,6 @@ public class CommandProcess implements Listener {
 		return false;
 	}
 
-	/*
-	 * @EventHandler public void commandSent(PlayerCommandPreprocessEvent e) {
-	 * Player p = e.getPlayer(); String sentCommand = e.getMessage().replace("/",
-	 * ""); int i = sentCommand.indexOf(' '); String label; try { label =
-	 * sentCommand.substring(0, i); } catch (StringIndexOutOfBoundsException exe) {
-	 * label = sentCommand; } FileConfiguration config = plugin.getConfig();
-	 * 
-	 * ArrayList<String> bypassList = Utils.getBypassList();
-	 * 
-	 * for (String key : config.getKeys(false)) { ConfigurationSection section =
-	 * config.getConfigurationSection(key); if (key.equalsIgnoreCase("Messages") ||
-	 * key.equalsIgnoreCase("checkUpdates") ||
-	 * key.equalsIgnoreCase("SendBypassMessage")) { continue; } // Check to see if
-	 * the command is equal to any of the aliases if (!label.equalsIgnoreCase(key))
-	 * { List<String> list = section.getStringList("aliases"); for (String s : list)
-	 * { if (!s.equalsIgnoreCase(label)) { continue; }
-	 * 
-	 * sentCommand = sentCommand.replace(label, s); System.out.println(label);
-	 * System.out.println(key); System.out.println(s); if
-	 * (!label.equalsIgnoreCase(s)) { continue; } break; } } if
-	 * (!label.equalsIgnoreCase(key)) { continue; } if
-	 * (bypassList.contains(p.getName())) { if
-	 * (config.getBoolean("SendBypassMessage") == true) {
-	 * p.sendMessage(Utils.chat(config.getString("Messages.BypassMessage"))); }
-	 * return; } int cooldown = section.getInt("cooldown");
-	 * 
-	 * if (addCooldown(p, config, key, cooldown) == true) { e.setCancelled(true); }
-	 * break; }
-	 * 
-	 * }
-	 */
-
 	public boolean addCooldown(Player p, FileConfiguration config, String key, int cooldown) {
 		String mapKey = p.getName() + " " + key;
 		if (cooldownMap.containsKey(p.getName() + " " + key)) {
