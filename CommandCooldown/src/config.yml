@@ -16,6 +16,7 @@ Messages:
     BypassOff: "&a&l[COMMAND COOLDOWN] &7No longer bypassing command cooldowns"
     NotAPlayer: "&a&l[COMMAND COOLDOWN] &7Only players can use that command"
     BypassMessage: "&a&l[COMMAND COOLDOWN] &7Bypassing cooldown"
+    NewAlias: "&a&l[COMMAND COOLDOWN] &7Added new alias"
 tpa:
   aliases:
   - etpa
