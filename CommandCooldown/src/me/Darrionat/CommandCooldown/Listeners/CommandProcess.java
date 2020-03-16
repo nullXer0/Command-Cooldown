@@ -47,18 +47,30 @@ public class CommandProcess implements Listener {
 			ConfigurationSection section = config.getConfigurationSection(key);
 
 			if (!key.equalsIgnoreCase(sentCommand)) {
-				if (section.getStringList("aliases") == null) {
-					break;
-				}
+
 				List<String> aliases = section.getStringList("aliases");
 
 				for (String alias : aliases) {
 					if (!label.equalsIgnoreCase(alias)) {
 						continue;
 					}
-					String[] arr = key.split(" ", 2);
-					if (!arr[1].equalsIgnoreCase(sentCommand.replace(label + " ", ""))) {
-
+					if (key.contains(" ")) {
+						String[] arr = key.split(" ", 2);
+						if (!arr[1].equalsIgnoreCase(sentCommand.replace(label + " ", ""))) {
+							if (!arr[0].equalsIgnoreCase(label)) {
+								continue;
+							}
+							if (playerBypassing(p)) {
+								return;
+							}
+							int cooldown = section.getInt("cooldown");
+							if (addCooldown(p, config, key, cooldown) == true) {
+								e.setCancelled(true);
+							}
+							return;
+						}
+					}
+					if (!label.equalsIgnoreCase(alias)) {
 						continue;
 					}
 					if (playerBypassing(p)) {
@@ -72,6 +84,19 @@ public class CommandProcess implements Listener {
 
 				}
 
+			}
+			if (!key.contains(" ")) {
+				if (!label.equalsIgnoreCase(key)) {
+					continue;
+				}
+				if (playerBypassing(p)) {
+					return;
+				}
+				int cooldown = section.getInt("cooldown");
+				if (addCooldown(p, config, key, cooldown) == true) {
+					e.setCancelled(true);
+				}
+				return;
 			}
 			if (!sentCommand.equalsIgnoreCase(key)) {
 				continue;
