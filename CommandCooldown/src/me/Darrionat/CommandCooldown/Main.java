@@ -3,6 +3,7 @@ package me.Darrionat.CommandCooldown;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.Darrionat.CommandCooldown.Commands.CommandControl;
+import me.Darrionat.CommandCooldown.Commands.Cooldowns;
 import me.Darrionat.CommandCooldown.Listeners.CommandProcess;
 import me.Darrionat.CommandCooldown.Listeners.PlayerJoin;
 import me.Darrionat.CommandCooldown.Utils.UpdateChecker;
@@ -14,6 +15,7 @@ public class Main extends JavaPlugin {
 	public void onEnable() {
 		new CommandProcess(this);
 		new CommandControl(this);
+		new Cooldowns(this);
 		saveDefaultConfig();
 
 		@SuppressWarnings("unused")

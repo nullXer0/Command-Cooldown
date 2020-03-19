@@ -19,7 +19,6 @@ public class CommandControl implements CommandExecutor {
 
 	public CommandControl(Main plugin) {
 		this.plugin = plugin;
-
 		plugin.getCommand("commandcooldown").setExecutor(this);
 	}
 
@@ -218,9 +217,11 @@ public class CommandControl implements CommandExecutor {
 
 	public List<String> getCmdMsgs() {
 		List<String> cmds = new ArrayList<String>();
-		cmds.add("  &7/cc list");
-		cmds.add("  &7/cc bypass");
-		cmds.add("  &7/cc reload");
+		cmds.add("  &7/cc list &a-Shows a list of all commands");
+		cmds.add("  &7/cc bypass &a- Bypasses cooldowns");
+		cmds.add("  &7/cc reload &a-Reloads the config.yml");
+		cmds.add("  &7/cooldowns &a-Shows a player's cooldowns");
+		cmds.add("  &7/cd &a-Shows a player's cooldowns");
 		cmds.add("  &7/cc add [cooldown] [command] [arg1] [arg2]...");
 		cmds.add("  &7/cc newalias [alias] [command]");
 		cmds.add("  &7/cc remove [command...]");

@@ -19,7 +19,7 @@ public class CommandProcess implements Listener {
 
 	private Main plugin;
 
-	static HashMap<String, Long> cooldownMap = new HashMap<String, Long>();
+	public static HashMap<String, Long> cooldownMap = new HashMap<String, Long>();
 
 	public CommandProcess(Main plugin) {
 		Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -148,14 +148,18 @@ public class CommandProcess implements Listener {
 					seconds = secondsLeft % 60;
 					timeString = String.format("%02dh %02dm %02ds", hours, minutes, seconds);
 				}
-				if (secondsLeft <= 3600) {
+				if (secondsLeft <= 3600 && secondsLeft > 60) {
 					minutes = (secondsLeft / 60);
 					seconds = secondsLeft % 60;
 					timeString = String.format("%02dm %02ds", minutes, seconds);
 				}
+				if (secondsLeft <= 60) {
+					seconds = secondsLeft;
+					timeString = String.format("%02ds", seconds);
+				}
 
-				p.sendMessage(Utils
-						.chat(config.getString("Messages.CooldownMsg").replace("%time%", String.valueOf(timeString))));
+					p.sendMessage(Utils.chat(
+							config.getString("Messages.CooldownMsg").replace("%time%", String.valueOf(timeString))));
 				System.out.println(Utils.chat(config.getString("Messages.NotifyConsole")
 						.replace("%time%", String.valueOf(timeString)).replace("%player%", p.getName())));
 				return true;
