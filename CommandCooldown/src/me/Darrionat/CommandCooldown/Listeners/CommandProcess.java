@@ -130,10 +130,29 @@ public class CommandProcess implements Listener {
 		if (cooldownMap.containsKey(p.getName() + " " + key)) {
 			long secondsLeft = ((cooldownMap.get(mapKey) / 1000) + cooldown) - (System.currentTimeMillis() / 1000);
 			if (secondsLeft > 0) {
-				long hours = secondsLeft / 3600;
-				long minutes = (secondsLeft % 3600) / 60;
-				long seconds = secondsLeft % 60;
-				String timeString = String.format("%02dh %02dm %02ds", hours, minutes, seconds);
+				String timeString = null;
+				long days;
+				long hours;
+				long minutes;
+				long seconds;
+				if (secondsLeft >= 86400) {
+					days = secondsLeft / 86400;
+					hours = (secondsLeft % 86400) / 3600;
+					minutes = (secondsLeft % 3600) / 60;
+					seconds = secondsLeft % 60;
+					timeString = String.format("%02dd %02dh %02dm %02ds", days, hours, minutes, seconds);
+				}
+				if (secondsLeft > 3600 && secondsLeft < 86400) {
+					hours = secondsLeft / 3600;
+					minutes = (secondsLeft % 3600) / 60;
+					seconds = secondsLeft % 60;
+					timeString = String.format("%02dh %02dm %02ds", hours, minutes, seconds);
+				}
+				if (secondsLeft <= 3600) {
+					minutes = (secondsLeft / 60);
+					seconds = secondsLeft % 60;
+					timeString = String.format("%02dm %02ds", minutes, seconds);
+				}
 
 				p.sendMessage(Utils
 						.chat(config.getString("Messages.CooldownMsg").replace("%time%", String.valueOf(timeString))));

@@ -4,6 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.Darrionat.CommandCooldown.Commands.CommandControl;
 import me.Darrionat.CommandCooldown.Listeners.CommandProcess;
+import me.Darrionat.CommandCooldown.Listeners.PlayerJoin;
 import me.Darrionat.CommandCooldown.Utils.UpdateChecker;
 import me.Darrionat.CommandCooldown.Utils.Utils;
 import me.Darrionat.CommandCooldown.bStats.Metrics;
@@ -24,7 +25,7 @@ public class Main extends JavaPlugin {
 			UpdateChecker updater = new UpdateChecker(this, id);
 			try {
 				if (updater.checkForUpdates()) {
-
+					new PlayerJoin(this);
 					getServer().getConsoleSender()
 							.sendMessage(Utils.chat("&7" + name + ": &bYou are currently running version " + version));
 					getServer().getConsoleSender().sendMessage(Utils.chat("&bAn update for &7" + name + " &f("
