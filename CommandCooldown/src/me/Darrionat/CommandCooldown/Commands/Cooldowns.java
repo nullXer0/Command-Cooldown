@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -40,7 +41,14 @@ public class Cooldowns implements CommandExecutor {
 		List<String> commands = new ArrayList<String>();
 		for (String key : cooldowns.keySet()) {
 			if (key.contains(p.getName())) {
-				commands.add(key.replace(p.getName() + " ", ""));
+				String command = key.replace(p.getName() + " ", "");
+				ConfigurationSection section = config.getConfigurationSection(command);
+				int cooldown = section.getInt("cooldown");
+				long secondsLeft = ((cooldowns.get(key) / 1000) + cooldown) - (System.currentTimeMillis() / 1000);
+				if (secondsLeft <= 0) {
+					continue;
+				}
+				commands.add(command);
 			}
 		}
 		if (commands.isEmpty()) {
@@ -50,6 +58,7 @@ public class Cooldowns implements CommandExecutor {
 		p.sendMessage(Utils.chat(config.getString("Messages.OnCooldown")));
 		for (String s : commands) {
 			p.sendMessage(Utils.chat("  &7" + s));
+
 		}
 		return true;
 	}
