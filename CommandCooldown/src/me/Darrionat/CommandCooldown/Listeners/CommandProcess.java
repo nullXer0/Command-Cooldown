@@ -60,7 +60,7 @@ public class CommandProcess implements Listener {
 							if (!arr[0].equalsIgnoreCase(label)) {
 								continue;
 							}
-							if (playerBypassing(p)) {
+							if (playerBypassing(p, key)) {
 								return;
 							}
 							int cooldown = section.getInt("cooldown");
@@ -73,9 +73,10 @@ public class CommandProcess implements Listener {
 					if (!label.equalsIgnoreCase(alias)) {
 						continue;
 					}
-					if (playerBypassing(p)) {
+					if (playerBypassing(p, key)) {
 						return;
 					}
+
 					int cooldown = section.getInt("cooldown");
 					if (addCooldown(p, config, key, cooldown) == true) {
 						e.setCancelled(true);
@@ -89,7 +90,7 @@ public class CommandProcess implements Listener {
 				if (!label.equalsIgnoreCase(key)) {
 					continue;
 				}
-				if (playerBypassing(p)) {
+				if (playerBypassing(p, key)) {
 					return;
 				}
 				int cooldown = section.getInt("cooldown");
@@ -101,7 +102,7 @@ public class CommandProcess implements Listener {
 			if (!sentCommand.equalsIgnoreCase(key)) {
 				continue;
 			}
-			if (playerBypassing(p)) {
+			if (playerBypassing(p, key)) {
 				return;
 			}
 			int cooldown = section.getInt("cooldown");
@@ -113,7 +114,7 @@ public class CommandProcess implements Listener {
 		}
 	}
 
-	public boolean playerBypassing(Player p) {
+	public boolean playerBypassing(Player p, String key) {
 		FileConfiguration config = plugin.getConfig();
 		ArrayList<String> bypassList = Utils.getBypassList();
 		if (bypassList.contains(p.getName())) {
@@ -122,6 +123,10 @@ public class CommandProcess implements Listener {
 			}
 			return true;
 		}
+		if (p.hasPermission("commandcooldown.bypass." + key.replace(" ", "_"))) {
+			return true;
+		}
+
 		return false;
 	}
 
@@ -158,8 +163,8 @@ public class CommandProcess implements Listener {
 					timeString = String.format("%02ds", seconds);
 				}
 
-					p.sendMessage(Utils.chat(
-							config.getString("Messages.CooldownMsg").replace("%time%", String.valueOf(timeString))));
+				p.sendMessage(Utils
+						.chat(config.getString("Messages.CooldownMsg").replace("%time%", String.valueOf(timeString))));
 				System.out.println(Utils.chat(config.getString("Messages.NotifyConsole")
 						.replace("%time%", String.valueOf(timeString)).replace("%player%", p.getName())));
 				return true;

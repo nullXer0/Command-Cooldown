@@ -225,6 +225,7 @@ public class CommandControl implements CommandExecutor {
 		cmds.add("  &7/cc add [cooldown] [command] [arg1] [arg2]...");
 		cmds.add("  &7/cc newalias [alias] [command]");
 		cmds.add("  &7/cc remove [command...]");
+		cmds.add("  &7Permission &a- Add 'commandcooldowns.byass.command_name' To bypass one command");
 		return cmds;
 	}
 
