@@ -76,7 +76,6 @@ public class CommandProcess implements Listener {
 					if (playerBypassing(p, key)) {
 						return;
 					}
-
 					int cooldown = section.getInt("cooldown");
 					if (addCooldown(p, config, key, cooldown) == true) {
 						e.setCancelled(true);

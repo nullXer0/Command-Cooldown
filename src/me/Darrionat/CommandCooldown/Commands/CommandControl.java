@@ -1,6 +1,7 @@
 package me.Darrionat.CommandCooldown.Commands;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.bukkit.command.Command;
@@ -132,17 +133,46 @@ public class CommandControl implements CommandExecutor {
 				try {
 					String cmdArg = args[i];
 					fullCommand = fullCommand + " " + cmdArg;
-
 				} catch (ArrayIndexOutOfBoundsException exe) {
 					break;
 				}
 			}
-
-			config.createSection(fullCommand);
-			ConfigurationSection section = config.getConfigurationSection(fullCommand);
-
-			section.set("cooldown", cooldown);
-
+			LinkedHashMap<ConfigurationSection, Integer> cooldownMap = new LinkedHashMap<ConfigurationSection, Integer>();
+			LinkedHashMap<ConfigurationSection, List<String>> aliasMap = new LinkedHashMap<ConfigurationSection, List<String>>();
+			for (String key : config.getKeys(false)) {
+				if (key.equalsIgnoreCase("checkUpdates") || key.equalsIgnoreCase("SendBypassMessage")
+						|| key.equalsIgnoreCase("Messages")) {
+					continue;
+				}
+				ConfigurationSection section = config.getConfigurationSection(key);
+				cooldownMap.put(section, section.getInt("cooldown"));
+				if (section.getStringList("aliases") != null) {
+					aliasMap.put(section, section.getStringList("aliases"));
+				}
+				config.set(key, null);
+			}
+			if (args.length > 3) {
+				config.createSection(fullCommand);
+				ConfigurationSection section = config.getConfigurationSection(fullCommand);
+				section.set("cooldown", cooldown);
+			}
+			// Old things
+			for (ConfigurationSection section : cooldownMap.keySet()) {
+				config.createSection(section.getName());
+				ConfigurationSection cSection = config.getConfigurationSection(section.getName());
+				int sectionCooldown = cooldownMap.get(section);
+				cSection.set("cooldown", sectionCooldown);
+			}
+			for (ConfigurationSection section : aliasMap.keySet()) {
+				ConfigurationSection cSection = config.getConfigurationSection(section.getName());
+				cSection.set("aliases", aliasMap.get(section));
+			}
+			// End of old things
+			if (args.length == 3) {
+				config.createSection(fullCommand);
+				ConfigurationSection section = config.getConfigurationSection(fullCommand);
+				section.set("cooldown", cooldown);
+			}
 			plugin.saveConfig();
 			sender.sendMessage(Utils.chat(config.getString("Messages.CreationSuccessful")));
 			return true;
