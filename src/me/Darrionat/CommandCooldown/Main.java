@@ -17,7 +17,6 @@ public class Main extends JavaPlugin {
 		new CommandControl(this);
 		new Cooldowns(this);
 		saveDefaultConfig();
-
 		@SuppressWarnings("unused")
 		Metrics metrics = new Metrics(this);
 		if (getConfig().getBoolean("checkUpdates") == true) {

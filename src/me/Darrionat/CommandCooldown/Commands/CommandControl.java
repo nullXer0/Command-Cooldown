@@ -26,7 +26,6 @@ public class CommandControl implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		FileConfiguration config = plugin.getConfig();
-
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
 			if (!p.hasPermission("commandcooldown.admin")) {
@@ -247,15 +246,15 @@ public class CommandControl implements CommandExecutor {
 
 	public List<String> getCmdMsgs() {
 		List<String> cmds = new ArrayList<String>();
-		cmds.add("  &7/cc list &a-Shows a list of all commands");
-		cmds.add("  &7/cc bypass &a- Bypasses cooldowns");
-		cmds.add("  &7/cc reload &a-Reloads the config.yml");
-		cmds.add("  &7/cooldowns &a-Shows a player's cooldowns");
-		cmds.add("  &7/cd &a-Shows a player's cooldowns");
+		cmds.add("  &7/cc list &aShows a list of all commands");
+		cmds.add("  &7/cc bypass &aBypasses cooldowns");
+		cmds.add("  &7/cc reload &aReloads the config.yml");
+		cmds.add("  &7/cooldowns &aShows a player's cooldowns");
+		cmds.add("  &7/cd &aShows a player's cooldowns");
 		cmds.add("  &7/cc add [cooldown] [command] [arg1] [arg2]...");
 		cmds.add("  &7/cc newalias [alias] [command]");
 		cmds.add("  &7/cc remove [command...]");
-		cmds.add("  &7Permission &a- Add 'commandcooldowns.byass.command_name' To bypass one command");
+		cmds.add("  &7Permission &aAdd 'commandcooldowns.byass.command_name' To bypass one command");
 		return cmds;
 	}
 
