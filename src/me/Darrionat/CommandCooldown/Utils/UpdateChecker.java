@@ -1,4 +1,4 @@
-package me.Darrionat.CommandCooldown.Utils;
+package me.Darrionat.CommandCooldown.utils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

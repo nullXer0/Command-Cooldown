@@ -1,9 +1,9 @@
-package me.Darrionat.CommandCooldown.Listeners;
+package me.Darrionat.CommandCooldown.listeners;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -14,31 +14,33 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
-import me.Darrionat.CommandCooldown.Main;
-import me.Darrionat.CommandCooldown.Utils.Utils;
+import me.Darrionat.CommandCooldown.Command;
+import me.Darrionat.CommandCooldown.CommandCooldown;
+import me.Darrionat.CommandCooldown.handlers.BypassHandler;
+import me.Darrionat.CommandCooldown.utils.Utils;
 
 public class CommandProcess implements Listener {
 
-	private Main plugin;
+	private CommandCooldown plugin;
 
-	public static HashMap<String, Long> cooldownMap = new HashMap<String, Long>();
-
-	public CommandProcess(Main plugin) {
+	public CommandProcess(CommandCooldown plugin) {
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 		this.plugin = plugin;
+	}
+
+	public void onCommandSent(PlayerCommandPreprocessEvent e) {
+
 	}
 
 	@EventHandler
 	public void commandSent(PlayerCommandPreprocessEvent e) {
 		Player p = e.getPlayer();
+		Command command = new Command(e.getMessage(), plugin);
+		System.out.println(command.cooldown);
 		String sentCommand = e.getMessage().replace("/", "");
-		int i = sentCommand.indexOf(' ');
-		String label;
-		try {
-			label = sentCommand.substring(0, i);
-		} catch (StringIndexOutOfBoundsException exe) {
-			label = sentCommand;
-		}
+
+		String label = command.label;
+
 		FileConfiguration config = plugin.getConfig();
 
 		for (String key : config.getKeys(false)) {
@@ -85,7 +87,6 @@ public class CommandProcess implements Listener {
 				}
 
 			}
-
 			if (!key.contains(" ")) {
 				if (!label.equalsIgnoreCase(key)) {
 					continue;
@@ -114,8 +115,8 @@ public class CommandProcess implements Listener {
 
 	public boolean playerBypassing(Player p, String key) {
 		FileConfiguration config = plugin.getConfig();
-		ArrayList<String> bypassList = Utils.getBypassList();
-		if (bypassList.contains(p.getName())) {
+		ArrayList<UUID> bypassList = BypassHandler.bypassList;
+		if (bypassList.contains(p.getUniqueId())) {
 			if (config.getBoolean("SendBypassMessage") == true) {
 				p.sendMessage(Utils.chat(config.getString("Messages.BypassMessage")));
 			}
@@ -146,9 +147,10 @@ public class CommandProcess implements Listener {
 				break;
 			}
 		}
-		String mapKey = p.getName() + " " + key;
-		if (cooldownMap.containsKey(mapKey)) {
-			long secondsLeft = ((cooldownMap.get(mapKey) / 1000) + cooldown) - (System.currentTimeMillis() / 1000);
+		String mapKey = p.getUniqueId().toString() + " " + key;
+		if (plugin.cooldownMap.containsKey(mapKey)) {
+			long secondsLeft = ((plugin.cooldownMap.get(mapKey) / 1000) + cooldown)
+					- (System.currentTimeMillis() / 1000);
 			if (secondsLeft > 0) {
 				String timeString = null;
 				long days;
@@ -185,7 +187,7 @@ public class CommandProcess implements Listener {
 				return true;
 			}
 		}
-		cooldownMap.put(mapKey, System.currentTimeMillis());
+		plugin.cooldownMap.put(mapKey, System.currentTimeMillis());
 		return false;
 	}
 }

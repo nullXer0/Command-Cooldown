@@ -1,8 +1,9 @@
-package me.Darrionat.CommandCooldown.Commands;
+package me.Darrionat.CommandCooldown.commands;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,16 +12,22 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import me.Darrionat.CommandCooldown.Main;
-import me.Darrionat.CommandCooldown.Utils.Utils;
+import me.Darrionat.CommandCooldown.CommandCooldown;
+import me.Darrionat.CommandCooldown.commands.subcommands.SubCommands;
+import me.Darrionat.CommandCooldown.handlers.BypassHandler;
+import me.Darrionat.CommandCooldown.handlers.MessageService;
+import me.Darrionat.CommandCooldown.utils.Utils;
 
-public class CommandControl implements CommandExecutor {
+public class BaseCommand implements CommandExecutor {
 
-	private Main plugin;
+	private CommandCooldown plugin;
+	protected MessageService messages;
 
-	public CommandControl(Main plugin) {
+	public BaseCommand(CommandCooldown plugin) {
 		this.plugin = plugin;
+		messages = new MessageService(plugin);
 		plugin.getCommand("commandcooldown").setExecutor(this);
+		setupCmdMsgs();
 	}
 
 	@Override
@@ -42,6 +49,16 @@ public class CommandControl implements CommandExecutor {
 			sender.sendMessage(Utils.chat("  &7/" + label + " help - &oFor additional information"));
 			return true;
 		}
+
+		SubCommands subCommands = new SubCommands(plugin);
+
+		if (sender instanceof Player) {
+			Player p = (Player) sender;
+			if (subCommands.isSubCommand(p, args))
+				return true;
+			
+		}
+
 		if (args[0].equalsIgnoreCase("help")) {
 			// /bansplus help
 			if (args.length == 1) {
@@ -136,6 +153,7 @@ public class CommandControl implements CommandExecutor {
 					break;
 				}
 			}
+			// Linked Hash Map maintains order compared to HashMap which is unordered
 			LinkedHashMap<ConfigurationSection, Integer> cooldownMap = new LinkedHashMap<ConfigurationSection, Integer>();
 			LinkedHashMap<ConfigurationSection, List<String>> aliasMap = new LinkedHashMap<ConfigurationSection, List<String>>();
 			for (String key : config.getKeys(false)) {
@@ -222,16 +240,16 @@ public class CommandControl implements CommandExecutor {
 				return true;
 			}
 			Player p = (Player) sender;
-			String name = p.getName();
-			ArrayList<String> bypassList = Utils.getBypassList();
+			UUID uuid = p.getUniqueId();
+			ArrayList<UUID> bypassList = BypassHandler.bypassList;
 
-			if (bypassList.contains(name)) {
+			if (bypassList.contains(uuid)) {
 				p.sendMessage(Utils.chat(config.getString("Messages.BypassOff")));
-				bypassList.remove(name);
+				bypassList.remove(uuid);
 				return true;
 			}
 			p.sendMessage(Utils.chat(config.getString("Messages.BypassOn")));
-			bypassList.add(name);
+			bypassList.add(uuid);
 			return true;
 
 		}
@@ -244,8 +262,9 @@ public class CommandControl implements CommandExecutor {
 		return true;
 	}
 
-	public List<String> getCmdMsgs() {
-		List<String> cmds = new ArrayList<String>();
+	List<String> cmds = new ArrayList<String>();
+
+	public void setupCmdMsgs() {
 		cmds.add("  &7/cc list &aShows a list of all commands");
 		cmds.add("  &7/cc bypass &aBypasses cooldowns");
 		cmds.add("  &7/cc reload &aReloads the config.yml");
@@ -255,7 +274,6 @@ public class CommandControl implements CommandExecutor {
 		cmds.add("  &7/cc newalias [alias] [command]");
 		cmds.add("  &7/cc remove [command...]");
 		cmds.add("  &7Permission &aAdd 'commandcooldowns.byass.command_name' To bypass one command");
-		return cmds;
 	}
 
 	private int listSize;
@@ -266,20 +284,19 @@ public class CommandControl implements CommandExecutor {
 		try {
 			page = Integer.parseInt(pageStr);
 		} catch (NumberFormatException exe) {
-			sendHelpMessage(sender, getCmdMsgs(), 1);
+			sendHelpMessage(sender, 1);
 			return;
 		}
-		listSize = getCmdMsgs().size();
+		listSize = cmds.size();
 		pageAmt = (listSize + 5 - 1) / 5;
 		if (page > pageAmt || page < 1) {
 			helpMessagePage(sender, "1");
 			return;
 		}
-		sendHelpMessage(sender, getCmdMsgs(), page);
 		return;
 	}
 
-	public void sendHelpMessage(CommandSender sender, List<String> cmds, int page) {
+	public void sendHelpMessage(CommandSender sender, int page) {
 		String topMsg = "&a&lCommand Cooldowns v" + plugin.getDescription().getVersion() + " Commands";
 		sender.sendMessage(Utils.chat(topMsg));
 		for (int i = page * 5 - 5; i <= (page * 5 - 1); i++) {
