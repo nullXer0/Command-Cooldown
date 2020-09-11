@@ -10,9 +10,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.Darrionat.CommandCooldown.bStats.Metrics;
 import me.Darrionat.CommandCooldown.commands.BaseCommand;
 import me.Darrionat.CommandCooldown.commands.Cooldowns;
+import me.Darrionat.CommandCooldown.editors.AddArgumentsEditor;
+import me.Darrionat.CommandCooldown.editors.AddCommandEditor;
+import me.Darrionat.CommandCooldown.editors.Editor;
+import me.Darrionat.CommandCooldown.editors.RemoveCommandEditor;
 import me.Darrionat.CommandCooldown.files.FileManager;
-import me.Darrionat.CommandCooldown.handlers.AddArgumentsEditor;
-import me.Darrionat.CommandCooldown.handlers.AddCommandEditor;
 import me.Darrionat.CommandCooldown.listeners.CommandProcess;
 import me.Darrionat.CommandCooldown.listeners.PlayerJoin;
 import me.Darrionat.CommandCooldown.utils.UpdateChecker;
@@ -33,6 +35,7 @@ public class CommandCooldown extends JavaPlugin {
 		// Editors
 		new AddCommandEditor(this);
 		new AddArgumentsEditor(this);
+		new RemoveCommandEditor(this);
 
 		new CommandProcess(this);
 		new BaseCommand(this);
@@ -107,7 +110,7 @@ public class CommandCooldown extends JavaPlugin {
 		for (Cooldown cooldown : cooldownList) {
 			cooldownDataConfig.set(cooldown.getYAMLKeyString(), cooldown.getEndOfCooldown());
 		}
-		fileManager.saveConfigFile(cooldownDataConfig);
+		fileManager.saveConfigFile(cooldownDataConfig, cooldownData);
 	}
 
 	private FileConfiguration getCooldownDataConfig() {
@@ -121,6 +124,14 @@ public class CommandCooldown extends JavaPlugin {
 		s = "&a&l[COMMAND COOLDOWN] &7" + s;
 		s = Utils.chat(s);
 		System.out.println(s);
+	}
+
+	public List<Editor> getEditorList() {
+		List<Editor> editorList = new ArrayList<>();
+		editorList.add(new AddCommandEditor(this));
+		editorList.add(new AddArgumentsEditor(this));
+		editorList.add(new RemoveCommandEditor(this));
+		return editorList;
 	}
 
 }

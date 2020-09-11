@@ -35,22 +35,22 @@ public class Cooldown {
 	}
 
 	public String getYAMLKeyString() {
-		return uuid.toString() + "|" + command.replace(" ", "_");
+		return uuid.toString() + "/" + command.replace(" ", "_");
 	}
 
 	public static UUID getUUIDFromKey(String key) {
-		return UUID.fromString(key.split("|")[0]);
+		return UUID.fromString(key.split("/")[0]);
 	}
 
 	public static String getCommandFromKey(String key, CommandCooldown plugin) {
-		return key.split("|")[1].replace("_", " ");
+		return key.split("/")[1].replace("_", " ");
 	}
 
 	public static Cooldown getSavedCooldown(UUID uuid, String command, CommandCooldown plugin) {
 		FileManager fileManager = new FileManager(plugin);
 		FileConfiguration cooldownsConfig = fileManager.getDataConfig("cooldownData");
 
-		String key = uuid.toString() + "|" + command.replace(" ", "_");
+		String key = uuid.toString() + "/" + command.replace(" ", "_");
 		long endOfCooldown = cooldownsConfig.getLong(key);
 
 		return new Cooldown(uuid, command, endOfCooldown);

@@ -27,7 +27,7 @@ public class MessageService {
 	public String noCommands = "noCommands";
 	public String noPermission = "noPermission";
 	public String reloadSuccessful = "reloadSuccessful";
-	public String toggleBypass = "bypassOn";
+	public String toggleBypass = "toggleBypass";
 	public String notAPlayer = "notAPlayer";
 	public String bypassingCooldown = "bypassingCooldown";
 	public String newAlias = "newAlias";
@@ -46,6 +46,7 @@ public class MessageService {
 	public String createdArgsCooldown = "createdArgsCooldown";
 	public String playerIsNotInEditor = "playerIsNotInEditor";
 	public String cancelledEdit = "cancelledEdit";
+	public String removeLabelChosen = "removeLabelChosen";
 
 	// Returns String in case placeholders are used
 	public String getMessage(String messageKey) {

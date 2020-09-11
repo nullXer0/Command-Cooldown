@@ -1,7 +1,9 @@
-package me.Darrionat.CommandCooldown.handlers;
+package me.Darrionat.CommandCooldown.editors;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -13,8 +15,9 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import me.Darrionat.CommandCooldown.Command;
 import me.Darrionat.CommandCooldown.CommandCooldown;
+import me.Darrionat.CommandCooldown.handlers.MessageService;
 
-public class AddCommandEditor implements Listener {
+public class AddCommandEditor implements Listener, Editor {
 
 	private CommandCooldown plugin;
 	private MessageService messages;
@@ -97,6 +100,19 @@ public class AddCommandEditor implements Listener {
 		createdCooldownMessage = createdCooldownMessage.replace("%command%", "/" + command.label);
 		createdCooldownMessage = createdCooldownMessage.replace("%cooldown%", String.valueOf(command.cooldown));
 		p.sendMessage(createdCooldownMessage);
+	}
+
+	@Override
+	public List<Set<UUID>> getQueueSets() {
+		List<Set<UUID>> queueSetsList = new ArrayList<>();
+		queueSetsList.add(awaitingCooldownSet);
+		queueSetsList.add(awaitingLabelSet);
+		return queueSetsList;
+	}
+
+	@Override
+	public HashMap<UUID, Command> getCommandMap() {
+		return commandUUIDMap;
 	}
 
 }

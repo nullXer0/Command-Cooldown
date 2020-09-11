@@ -31,7 +31,7 @@ public class BaseCommand implements CommandExecutor {
 			Player p = (Player) sender;
 			String adminPerm = "commandcooldown.admin";
 			if (!p.hasPermission(adminPerm)) {
-				p.sendMessage(messages.getMessage(messages.noPermission.replace("%perm%", adminPerm)));
+				p.sendMessage(messages.getMessage(messages.noPermission).replace("%perm%", adminPerm));
 				return true;
 			}
 		}

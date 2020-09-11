@@ -36,12 +36,11 @@ public class CommandProcess implements Listener {
 		Command command = new Command(message, plugin);
 
 		// The command doesn't have a cooldown or the cooldown is <= 0
-		if (!command.hasCooldown)
+		if (!command.hasCooldown) {
 			return;
-
+		}
 		// Player is bypassing with command or permission
 		if (BypassHandler.playerIsBypassing(command, p)) {
-
 			if (config.getBoolean("SendBypassMessage") == true)
 				p.sendMessage(messages.getMessage(messages.bypassingCooldown));
 
@@ -58,7 +57,6 @@ public class CommandProcess implements Listener {
 			e.setCancelled(true);
 			return;
 		}
-
 		giveCooldown(command, p);
 	}
 

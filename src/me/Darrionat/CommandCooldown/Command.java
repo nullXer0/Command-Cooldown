@@ -77,8 +77,10 @@ public class Command {
 				}
 			}
 		}
-		if (commandSectionKey.equals(""))
+		if (commandSectionKey.equals("")) {
+			commandSection = cooldownsConfig.getConfigurationSection(label);
 			return null;
+		}
 		commandSection = cooldownsConfig.getConfigurationSection(commandSectionKey);
 		List<String> aliases = new ArrayList<>();
 		aliases.add(commandSectionKey);
@@ -91,8 +93,9 @@ public class Command {
 		if (commandSection == null) {
 			return false;
 		}
-		if (commandSection.getConfigurationSection("cooldowns") == null)
+		if (commandSection.getConfigurationSection("cooldowns") == null) {
 			return false;
+		}
 		return true;
 	}
 
@@ -102,8 +105,8 @@ public class Command {
 			return 0;
 		String noBaseCooldownString = NoBaseCooldownException.ERROR_STRING.replace("sectionName",
 				commandSection.getName());
-		if (commandSection.getConfigurationSection("cooldowns.*") == null) {
-
+		double baseCooldown = commandSection.getDouble("cooldowns.*");
+		if (baseCooldown == 0) {
 			new NoBaseCooldownException(noBaseCooldownString).printStackTrace();
 			System.out.println(Utils.chat("&4Error: &c" + noBaseCooldownString));
 			return 0;
@@ -121,7 +124,7 @@ public class Command {
 		}
 		List<String[]> passedArgSet = getPassedArguments(argumentCooldownMap);
 
-		double baseCooldown = cooldownsSection.getDouble("*");
+		// double baseCooldown = cooldownsSection.getDouble("*");
 
 		if (passedArgSet.size() == 0)
 			return baseCooldown;
@@ -180,6 +183,7 @@ public class Command {
 		return passedArgSet;
 	}
 
+	// Save the command's cooldown
 	// Called in message editor
 	public void save() {
 		ConfigurationSection section;
@@ -196,8 +200,21 @@ public class Command {
 		section.set("aliases", aliases);
 		cooldownSection.set("*", cooldown);
 
-		fileManager.saveConfigFile(cooldownsConfig);
+		fileManager.saveConfigFile(cooldownsConfig, "cooldowns");
 
+	}
+
+	/**
+	 * Deletes the cooldown on the command
+	 * 
+	 * @return: True if successful
+	 */
+	public boolean remove() {
+		if (cooldownsConfig.getConfigurationSection(label) == null)
+			return false;
+		cooldownsConfig.set(label, null);
+		fileManager.saveConfigFile(cooldownsConfig, "cooldowns");
+		return true;
 	}
 
 }

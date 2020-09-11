@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 
 import me.Darrionat.CommandCooldown.Command;
-import me.Darrionat.CommandCooldown.CommandCooldown;
 
 public class BypassHandler {
 
@@ -27,17 +26,5 @@ public class BypassHandler {
 		}
 
 		return false;
-	}
-
-	// Used for obtaining the command from the saved string in cooldowns.yml
-	public static Command getCommandFromSavedString(String s, CommandCooldown plugin) {
-		String command = s.split("|")[0];
-		return new Command(command, plugin);
-	}
-
-	// Used for obtaining the end of a cooldown from the saved string in
-	// cooldowns.yml
-	public static long getLongFromSavedString(String s) {
-		return Long.parseLong(s.split("|")[1]);
 	}
 }

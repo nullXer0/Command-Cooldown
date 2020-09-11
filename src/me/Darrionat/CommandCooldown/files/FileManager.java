@@ -1,4 +1,4 @@
-	package me.Darrionat.CommandCooldown.files;
+package me.Darrionat.CommandCooldown.files;
 
 import java.io.File;
 import java.io.IOException;
@@ -88,8 +88,8 @@ public class FileManager {
 		}
 	}
 
-	public void saveConfigFile(FileConfiguration dataConfig) {
-		dataFile = new File(plugin.getDataFolder(), dataConfig.getName());
+	public void saveConfigFile(FileConfiguration dataConfig, String fileName) {
+		dataFile = new File(plugin.getDataFolder(), fileName + ".yml");
 		try {
 			dataConfig.save(dataFile);
 		} catch (IOException e) {
@@ -113,7 +113,7 @@ public class FileManager {
 			if (!jarConfig.contains(key))
 				config.set(key, null);
 		config.set("version", plugin.getDescription().getVersion());
-		saveConfigFile(config);
+		saveConfigFile(config, fileName);
 
 	}
 }
