@@ -1,9 +1,8 @@
 package me.Darrionat.CommandCooldown;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,6 +11,8 @@ import me.Darrionat.CommandCooldown.bStats.Metrics;
 import me.Darrionat.CommandCooldown.commands.BaseCommand;
 import me.Darrionat.CommandCooldown.commands.Cooldowns;
 import me.Darrionat.CommandCooldown.files.FileManager;
+import me.Darrionat.CommandCooldown.handlers.AddArgumentsEditor;
+import me.Darrionat.CommandCooldown.handlers.AddCommandEditor;
 import me.Darrionat.CommandCooldown.listeners.CommandProcess;
 import me.Darrionat.CommandCooldown.listeners.PlayerJoin;
 import me.Darrionat.CommandCooldown.utils.UpdateChecker;
@@ -20,17 +21,23 @@ import me.Darrionat.CommandCooldown.utils.Utils;
 public class CommandCooldown extends JavaPlugin {
 
 	public FileManager fileManager;
-	public HashMap<String, Long> cooldownMap = new HashMap<String, Long>();
+
+	// UUID: commmand | timestamp
+	public List<Cooldown> cooldownList = new ArrayList<>();
 
 	public void onEnable() {
 		fileManager = new FileManager(this);
 		updateConfigs();
-
 		loadCooldowns();
+
+		// Editors
+		new AddCommandEditor(this);
+		new AddArgumentsEditor(this);
 
 		new CommandProcess(this);
 		new BaseCommand(this);
 		new Cooldowns(this);
+
 		saveDefaultConfig();
 		@SuppressWarnings("unused")
 		Metrics metrics = new Metrics(this);
@@ -84,18 +91,23 @@ public class CommandCooldown extends JavaPlugin {
 	private void loadCooldowns() {
 		FileConfiguration cooldownDataConfig = getCooldownDataConfig();
 		for (String key : cooldownDataConfig.getKeys(false)) {
-			cooldownMap.put(key, getConfig().getLong(key));
+
+			UUID uuid = Cooldown.getUUIDFromKey(key);
+			String command = Cooldown.getCommandFromKey(key, this);
+			long endOfCooldown = cooldownDataConfig.getLong(key);
+
+			Cooldown cooldown = new Cooldown(uuid, command, endOfCooldown);
+			cooldownList.add(cooldown);
 		}
 	}
 
 	private void saveCooldowns() {
 		FileConfiguration cooldownDataConfig = getCooldownDataConfig();
 
-		for (Entry<String, Long> entry : cooldownMap.entrySet()) {
-			cooldownDataConfig.set(entry.getKey(), entry.getValue());
+		for (Cooldown cooldown : cooldownList) {
+			cooldownDataConfig.set(cooldown.getYAMLKeyString(), cooldown.getEndOfCooldown());
 		}
 		fileManager.saveConfigFile(cooldownDataConfig);
-
 	}
 
 	private FileConfiguration getCooldownDataConfig() {

@@ -1,7 +1,6 @@
 package me.Darrionat.CommandCooldown.handlers;
 
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 
 import me.Darrionat.CommandCooldown.CommandCooldown;
 import me.Darrionat.CommandCooldown.utils.Utils;
@@ -41,9 +40,15 @@ public class MessageService {
 	public String notACooldown = "notACooldown";
 	public String createdCooldown = "createdCooldown";
 	public String playerIsInEditor = "playerIsInEditor";
+	public String addArguments = "addArguments";
+	public String notArguments = "notArguments";
+	public String addCooldownToArguments = "addCooldownToArguments";
+	public String createdArgsCooldown = "createdArgsCooldown";
+	public String playerIsNotInEditor = "playerIsNotInEditor";
+	public String cancelledEdit = "cancelledEdit";
 
 	// Returns String in case placeholders are used
-	public String getMessage(Player p, String messageKey) {
+	public String getMessage(String messageKey) {
 		return Utils.chat(prefix + messagesConfig.getString(messageKey));
 	}
 }

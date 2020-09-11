@@ -8,8 +8,9 @@ import org.bukkit.entity.Player;
 
 import me.Darrionat.CommandCooldown.CommandCooldown;
 import me.Darrionat.CommandCooldown.commands.BaseCommand;
+import me.Darrionat.CommandCooldown.handlers.AddArgumentsEditor;
+import me.Darrionat.CommandCooldown.handlers.AddCommandEditor;
 import me.Darrionat.CommandCooldown.handlers.BypassHandler;
-import me.Darrionat.CommandCooldown.handlers.CommandEditor;
 import me.Darrionat.CommandCooldown.utils.Utils;
 
 public class SubCommands extends BaseCommand {
@@ -78,21 +79,29 @@ public class SubCommands extends BaseCommand {
 			addAlias();
 			return true;
 		}
+		if (args[0].equalsIgnoreCase("addArguments") || args[0].equalsIgnoreCase("addArgs")) {
+			addArguments();
+			return true;
+		}
+		if (args[0].equalsIgnoreCase("cancel")) {
+			cancel();
+			return true;
+		}
 
 		return false;
 	}
 
-	public void help() {
+	private void help() {
 		if (!playerHasPermission(helpPermission))
 			return;
 		if (args.length == 1) {
-			sendHelpMessage(p, 1);
+			sendHelpPage(p, "1");
 			return;
 		}
-		helpMessagePage(p, args[1]);
+		sendHelpPage(p, args[1]);
 	}
 
-	public void bypass() {
+	private void bypass() {
 		if (!playerHasPermission(bypassPermission))
 			return;
 
@@ -108,63 +117,75 @@ public class SubCommands extends BaseCommand {
 		p.sendMessage(Utils.chat(config.getString("Messages.BypassOn")));
 	}
 
-	public void reload() {
+	private void reload() {
 		if (!playerHasPermission(reloadPermission))
 			return;
 		plugin.reloadConfig();
 		p.sendMessage(Utils.chat(config.getString("Messages.ReloadSuccessful")));
 	}
 
-	// /cc add
-	// Say a command, without arguments and without a /, that you'd like to add
-	// a cooldown to
-	// shop
-	// What would you like the base cooldown to be in seconds?
-	// 60
-	public void add() {
+	private void add() {
 		if (!playerHasPermission(addPermission))
 			return;
 		if (playerIsInEditor()) {
-			p.sendMessage(messages.getMessage(p, messages.playerIsInEditor));
+			p.sendMessage(messages.getMessage(messages.playerIsInEditor));
 			return;
 		}
-		p.sendMessage(messages.getMessage(p, messages.waitingForLabel));
-		CommandEditor.awaitingLabelSet.add(p.getUniqueId());
+		p.sendMessage(messages.getMessage(messages.waitingForLabel));
+		AddCommandEditor.awaitingLabelSet.add(p.getUniqueId());
 	}
 
-	// Say a command, without arguments and without a /, that'd you'd like to add a
-	// cooldown to
-	// shop
-	// %command% selected, please say in chat what arguments you want to add a
-	// cooldown to
-	// notch *
-	// What cooldown would you like to add to %command_with_arguments%?
-	public void addArguments() {
+	private void addArguments() {
 		if (!playerHasPermission(addArgumentsPermission))
 			return;
-
+		if (playerIsInEditor()) {
+			p.sendMessage(messages.getMessage(messages.playerIsInEditor));
+			return;
+		}
+		p.sendMessage(messages.getMessage(messages.waitingForLabel));
+		AddArgumentsEditor.awaitingLabelSet.add(p.getUniqueId());
 	}
 
-	public void cancel() {
-
-	}
-
-	public void remove() {
+	// Select a command to remove a cooldown from
+	private void remove() {
 		if (!playerHasPermission(removePermission))
 			return;
 	}
 
-	public void addAlias() {
+	private void addAlias() {
 		if (!playerHasPermission(addAliasPermission))
 			return;
+	}
+
+	private void cancel() {
+		if (!playerIsInEditor()) {
+			p.sendMessage(messages.getMessage(messages.playerIsNotInEditor));
+			return;
+		}
+		UUID uuid = p.getUniqueId();
+		AddCommandEditor.awaitingLabelSet.remove(uuid);
+		AddCommandEditor.awaitingCooldownSet.remove(uuid);
+		AddCommandEditor.commandUUIDMap.remove(uuid);
+
+		AddArgumentsEditor.awaitingLabelSet.remove(uuid);
+		AddArgumentsEditor.awaitingArgumentsSet.remove(uuid);
+		AddArgumentsEditor.awaitingCooldownSet.remove(uuid);
+		AddArgumentsEditor.commandUUIDMap.remove(uuid);
+
+		p.sendMessage(messages.getMessage(messages.cancelledEdit));
 	}
 
 	private boolean playerIsInEditor() {
 		UUID uuid = p.getUniqueId();
 		// /cc add
-		if (CommandEditor.awaitingCooldownSet.contains(uuid) || CommandEditor.awaitingLabelSet.contains(uuid)) {
+		if (AddCommandEditor.awaitingLabelSet.contains(uuid) || AddCommandEditor.awaitingCooldownSet.contains(uuid))
 			return true;
-		}
+
+		// /cc addarguments
+		if (AddArgumentsEditor.awaitingLabelSet.contains(uuid) || AddArgumentsEditor.awaitingArgumentsSet.contains(uuid)
+				|| AddArgumentsEditor.awaitingCooldownSet.contains(uuid))
+			return true;
+
 		return false;
 	}
 

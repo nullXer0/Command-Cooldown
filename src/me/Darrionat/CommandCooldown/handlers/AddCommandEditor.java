@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,12 +14,13 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import me.Darrionat.CommandCooldown.Command;
 import me.Darrionat.CommandCooldown.CommandCooldown;
 
-public class CommandEditor implements Listener {
+public class AddCommandEditor implements Listener {
 
 	private CommandCooldown plugin;
 	private MessageService messages;
 
-	public CommandEditor(CommandCooldown plugin) {
+	public AddCommandEditor(CommandCooldown plugin) {
+		Bukkit.getPluginManager().registerEvents(this, plugin);
 		this.plugin = plugin;
 		messages = new MessageService(plugin);
 	}
@@ -38,11 +40,11 @@ public class CommandEditor implements Listener {
 
 		if (!awaitingLabelSet.contains(uuid))
 			return;
-		
+
 		e.setCancelled(true);
-		
+
 		if (sentMessage.contains(" ")) {
-			p.sendMessage(messages.getMessage(p, messages.notACommandLabel));
+			p.sendMessage(messages.getMessage(messages.notACommandLabel));
 			return;
 		}
 
@@ -50,7 +52,7 @@ public class CommandEditor implements Listener {
 		awaitingCooldownSet.add(uuid);
 		commandUUIDMap.put(uuid, new Command(sentMessage, plugin));
 
-		String addCooldownMessage = messages.getMessage(p, messages.addCooldown);
+		String addCooldownMessage = messages.getMessage(messages.addCooldown);
 		addCooldownMessage = addCooldownMessage.replace("%command%", "/" + sentMessage);
 		p.sendMessage(addCooldownMessage);
 
@@ -72,7 +74,7 @@ public class CommandEditor implements Listener {
 		e.setCancelled(true);
 
 		if (sentMessage.contains(" ")) {
-			p.sendMessage(messages.getMessage(p, messages.notACooldown));
+			p.sendMessage(messages.getMessage(messages.notACooldown));
 			return;
 		}
 
@@ -80,7 +82,7 @@ public class CommandEditor implements Listener {
 		try {
 			cooldown = Double.parseDouble(sentMessage);
 		} catch (NumberFormatException exe) {
-			p.sendMessage(messages.getMessage(p, messages.notACooldown));
+			p.sendMessage(messages.getMessage(messages.notACooldown));
 			return;
 		}
 
@@ -91,10 +93,10 @@ public class CommandEditor implements Listener {
 		awaitingCooldownSet.remove(uuid);
 		commandUUIDMap.remove(uuid);
 
-		String createdCooldownMessage = messages.getMessage(p, messages.createdCooldown);
+		String createdCooldownMessage = messages.getMessage(messages.createdCooldown);
 		createdCooldownMessage = createdCooldownMessage.replace("%command%", "/" + command.label);
 		createdCooldownMessage = createdCooldownMessage.replace("%cooldown%", String.valueOf(command.cooldown));
 		p.sendMessage(createdCooldownMessage);
-
 	}
+
 }

@@ -14,7 +14,7 @@ import me.Darrionat.CommandCooldown.utils.Utils;
 
 public class Command {
 
-	public String command;
+	public String message;
 	public String label;
 	public String[] args;
 	public List<String> aliases = new ArrayList<>();
@@ -30,7 +30,7 @@ public class Command {
 		fileManager = new FileManager(plugin);
 		cooldownsConfig = fileManager.getDataConfig("cooldowns");
 
-		this.command = command.replaceFirst("/", "");
+		this.message = command.replaceFirst("/", "");
 		this.label = getLabel();
 		this.args = getArgs();
 		this.aliases = getAliases();
@@ -40,17 +40,17 @@ public class Command {
 
 	private String getLabel() {
 		String label;
-		int i = command.indexOf(' ');
+		int i = message.indexOf(' ');
 		try {
-			label = command.substring(0, i);
+			label = message.substring(0, i);
 		} catch (StringIndexOutOfBoundsException exe) {
-			label = command;
+			label = message;
 		}
 		return label;
 	}
 
 	private String[] getArgs() {
-		String argsString = command.replace(label, "");
+		String argsString = message.replace(label, "");
 		try {
 			return argsString.split(" ");
 		} catch (PatternSyntaxException exe) {
@@ -93,10 +93,10 @@ public class Command {
 		}
 		if (commandSection.getConfigurationSection("cooldowns") == null)
 			return false;
-
 		return true;
 	}
 
+	// Returns cooldown in seconds
 	private double getCooldown() {
 		if (!hasCooldown)
 			return 0;
@@ -108,10 +108,8 @@ public class Command {
 			System.out.println(Utils.chat("&4Error: &c" + noBaseCooldownString));
 			return 0;
 		}
-		/**
-		 * @param String[] Cooldowned Arguments
-		 * @param Double   Cooldown
-		 */
+
+		// Map of the arguments and their cooldown
 		HashMap<String[], Double> argumentCooldownMap = new HashMap<>();
 		ConfigurationSection cooldownsSection = commandSection.getConfigurationSection("cooldowns");
 
@@ -136,7 +134,13 @@ public class Command {
 		}
 
 		// Gets the cooldown from the last remaining set
-		return argumentCooldownMap.get(passedArgSet.get(0));
+		double cooldown = argumentCooldownMap.get(passedArgSet.get(0));
+		if (cooldown <= 0) {
+			this.hasCooldown = false;
+			return 0;
+		}
+
+		return cooldown;
 	}
 
 	/**
@@ -178,8 +182,16 @@ public class Command {
 
 	// Called in message editor
 	public void save() {
-		ConfigurationSection section = cooldownsConfig.createSection(label);
-		ConfigurationSection cooldownSection = section.createSection("cooldowns");
+		ConfigurationSection section;
+		ConfigurationSection cooldownSection;
+
+		if (cooldownsConfig.getConfigurationSection(label) == null) {
+			section = cooldownsConfig.createSection(label);
+			cooldownSection = section.createSection("cooldowns");
+		} else {
+			section = cooldownsConfig.getConfigurationSection(label);
+			cooldownSection = section.getConfigurationSection("cooldowns");
+		}
 
 		section.set("aliases", aliases);
 		cooldownSection.set("*", cooldown);
