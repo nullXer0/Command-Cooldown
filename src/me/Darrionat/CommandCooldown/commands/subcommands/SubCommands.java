@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import me.Darrionat.CommandCooldown.CommandCooldown;
 import me.Darrionat.CommandCooldown.commands.BaseCommand;
+import me.Darrionat.CommandCooldown.editors.AddAliasEditor;
 import me.Darrionat.CommandCooldown.editors.AddArgumentsEditor;
 import me.Darrionat.CommandCooldown.editors.AddCommandEditor;
 import me.Darrionat.CommandCooldown.editors.Editor;
@@ -212,6 +213,13 @@ public class SubCommands extends BaseCommand {
 	private void addAlias() {
 		if (!playerHasPermission(addAliasPermission))
 			return;
+		if (playerIsInEditor()) {
+			p.sendMessage(messages.getMessage(messages.playerIsInEditor));
+			return;
+		}
+		p.sendMessage(messages.getMessage(messages.waitingForLabel));
+		AddAliasEditor.awaitingLabelSet.add(p.getUniqueId());
+
 	}
 
 	private void cancel() {
@@ -222,7 +230,7 @@ public class SubCommands extends BaseCommand {
 
 		UUID uuid = p.getUniqueId();
 
-		for (Editor editor : plugin.getEditorList()) {
+		for (Editor editor : plugin.editorList) {
 			for (Set<UUID> set : editor.getQueueSets()) {
 				set.remove(uuid);
 			}
@@ -234,7 +242,7 @@ public class SubCommands extends BaseCommand {
 	private boolean playerIsInEditor() {
 		UUID uuid = p.getUniqueId();
 
-		for (Editor editor : plugin.getEditorList()) {
+		for (Editor editor : plugin.editorList) {
 			for (Set<UUID> set : editor.getQueueSets()) {
 				if (set.contains(uuid))
 					return true;

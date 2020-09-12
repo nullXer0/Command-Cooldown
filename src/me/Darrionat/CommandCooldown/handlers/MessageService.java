@@ -47,6 +47,7 @@ public class MessageService {
 	public String playerIsNotInEditor = "playerIsNotInEditor";
 	public String cancelledEdit = "cancelledEdit";
 	public String removeLabelChosen = "removeLabelChosen";
+	public String waitingForAlias = "waitingForAlias";
 
 	// Returns String in case placeholders are used
 	public String getMessage(String messageKey) {

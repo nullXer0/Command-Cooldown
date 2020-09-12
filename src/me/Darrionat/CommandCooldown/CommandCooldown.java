@@ -10,6 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.Darrionat.CommandCooldown.bStats.Metrics;
 import me.Darrionat.CommandCooldown.commands.BaseCommand;
 import me.Darrionat.CommandCooldown.commands.Cooldowns;
+import me.Darrionat.CommandCooldown.editors.AddAliasEditor;
 import me.Darrionat.CommandCooldown.editors.AddArgumentsEditor;
 import me.Darrionat.CommandCooldown.editors.AddCommandEditor;
 import me.Darrionat.CommandCooldown.editors.Editor;
@@ -33,9 +34,7 @@ public class CommandCooldown extends JavaPlugin {
 		loadCooldowns();
 
 		// Editors
-		new AddCommandEditor(this);
-		new AddArgumentsEditor(this);
-		new RemoveCommandEditor(this);
+		setupEditorList();
 
 		new CommandProcess(this);
 		new BaseCommand(this);
@@ -126,12 +125,14 @@ public class CommandCooldown extends JavaPlugin {
 		System.out.println(s);
 	}
 
-	public List<Editor> getEditorList() {
-		List<Editor> editorList = new ArrayList<>();
+	public List<Editor> editorList = new ArrayList<>();
+
+	public void setupEditorList() {
+		// Also initalizes classes and listeners
 		editorList.add(new AddCommandEditor(this));
 		editorList.add(new AddArgumentsEditor(this));
 		editorList.add(new RemoveCommandEditor(this));
-		return editorList;
+		editorList.add(new AddAliasEditor(this));
 	}
 
 }

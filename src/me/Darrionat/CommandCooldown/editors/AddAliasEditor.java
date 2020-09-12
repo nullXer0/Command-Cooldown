@@ -17,17 +17,17 @@ import me.Darrionat.CommandCooldown.Command;
 import me.Darrionat.CommandCooldown.CommandCooldown;
 import me.Darrionat.CommandCooldown.handlers.MessageService;
 
-public class AddCommandEditor implements Listener, Editor {
+public class AddAliasEditor implements Listener, Editor {
 
 	private CommandCooldown plugin;
 	private MessageService messages;
 
-	public AddCommandEditor(CommandCooldown plugin) {
+	public AddAliasEditor(CommandCooldown plugin) {
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 		this.plugin = plugin;
 		messages = new MessageService(plugin);
 
-		queueSetsList.add(awaitingCooldownSet);
+		queueSetsList.add(awaitingAliasSet);
 		queueSetsList.add(awaitingLabelSet);
 	}
 
@@ -40,7 +40,6 @@ public class AddCommandEditor implements Listener, Editor {
 	// Indicator that the player is ready to send a label in chat
 	public static Set<UUID> awaitingLabelSet = new HashSet<>();
 
-	// Recieves label /cc add (Part 1)
 	@EventHandler
 	public void onLabelMessage(AsyncPlayerChatEvent e) {
 		Player p = e.getPlayer();
@@ -58,54 +57,41 @@ public class AddCommandEditor implements Listener, Editor {
 		}
 
 		awaitingLabelSet.remove(uuid);
-		awaitingCooldownSet.add(uuid);
+		awaitingAliasSet.add(uuid);
 		commandUUIDMap.put(uuid, new Command(sentMessage, plugin));
 
-		String addCooldownMessage = messages.getMessage(messages.addCooldown);
-		addCooldownMessage = addCooldownMessage.replace("%command%", "/" + sentMessage);
-		p.sendMessage(addCooldownMessage);
-
+		p.sendMessage(messages.getMessage(messages.waitingForAlias));
 	}
 
-	// Indicator that the player is ready to send a cooldown in chat
-	public static Set<UUID> awaitingCooldownSet = new HashSet<>();
+	// Indicator that the player is ready to send the alias in chat
+	public static Set<UUID> awaitingAliasSet = new HashSet<>();
 
-	// Recieves cooldown /cc add (Part 2)
 	@EventHandler
-	public void onCooldownMessage(AsyncPlayerChatEvent e) {
+	public void onAliasMessage(AsyncPlayerChatEvent e) {
 		Player p = e.getPlayer();
 		UUID uuid = p.getUniqueId();
 		String sentMessage = e.getMessage();
 
-		if (!awaitingCooldownSet.contains(uuid))
+		if (!awaitingAliasSet.contains(uuid))
 			return;
 
 		e.setCancelled(true);
 
 		if (sentMessage.contains(" ")) {
-			p.sendMessage(messages.getMessage(messages.notACooldown));
-			return;
-		}
-
-		double cooldown;
-		try {
-			cooldown = Double.parseDouble(sentMessage);
-		} catch (NumberFormatException exe) {
-			p.sendMessage(messages.getMessage(messages.notACooldown));
+			p.sendMessage(messages.getMessage(messages.notACommandLabel));
 			return;
 		}
 
 		Command command = commandUUIDMap.get(uuid);
-		command.cooldown = cooldown;
+		List<String> aliases = command.aliases;
+		aliases.add(sentMessage);
+		command.aliases = aliases;
 		command.save();
 
-		awaitingCooldownSet.remove(uuid);
+		awaitingAliasSet.remove(uuid);
 		commandUUIDMap.remove(uuid);
 
-		String createdCooldownMessage = messages.getMessage(messages.createdCooldown);
-		createdCooldownMessage = createdCooldownMessage.replace("%command%", "/" + command.label);
-		createdCooldownMessage = createdCooldownMessage.replace("%cooldown%", String.valueOf(command.cooldown));
-		p.sendMessage(createdCooldownMessage);
+		p.sendMessage(messages.getMessage(messages.newAlias));
 	}
 
 	@Override

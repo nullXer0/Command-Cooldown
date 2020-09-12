@@ -27,7 +27,14 @@ public class AddArgumentsEditor implements Listener, Editor {
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 		this.plugin = plugin;
 		messages = new MessageService(plugin);
+
+		queueSetsList.add(awaitingLabelSet);
+		queueSetsList.add(awaitingArgumentsSet);
+		queueSetsList.add(awaitingCooldownSet);
 	}
+
+	// Contains all queue sets
+	private List<Set<UUID>> queueSetsList = new ArrayList<>();
 
 	// Sets up the players command for saving
 	public static HashMap<UUID, Command> commandUUIDMap = new HashMap<>();
@@ -138,10 +145,6 @@ public class AddArgumentsEditor implements Listener, Editor {
 
 	@Override
 	public List<Set<UUID>> getQueueSets() {
-		List<Set<UUID>> queueSetsList = new ArrayList<>();
-		queueSetsList.add(awaitingLabelSet);
-		queueSetsList.add(awaitingArgumentsSet);
-		queueSetsList.add(awaitingCooldownSet);
 		return queueSetsList;
 	}
 

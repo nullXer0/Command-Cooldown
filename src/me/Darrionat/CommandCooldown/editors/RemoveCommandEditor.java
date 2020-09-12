@@ -27,7 +27,12 @@ public class RemoveCommandEditor implements Listener, Editor {
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 		this.plugin = plugin;
 		messages = new MessageService(plugin);
+
+		queueSetsList.add(awaitingLabelSet);
 	}
+
+	// Contains all queue sets
+	private List<Set<UUID>> queueSetsList = new ArrayList<>();
 
 	// Sets up the players command for removing
 	public static HashMap<UUID, Command> commandUUIDMap = new HashMap<>();
@@ -117,8 +122,6 @@ public class RemoveCommandEditor implements Listener, Editor {
 
 	@Override
 	public List<Set<UUID>> getQueueSets() {
-		List<Set<UUID>> queueSetsList = new ArrayList<>();
-		queueSetsList.add(awaitingLabelSet);
 		return queueSetsList;
 	}
 
