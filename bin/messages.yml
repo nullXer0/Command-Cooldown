@@ -35,4 +35,4 @@ playerIsNotInEditor: '&7You are not currently editing a command!'
 
 removeLabelChosen: '&a%command% &7selected, please say in chat what arguments you want to remove a cooldown from. Say &a* &7to remove the whole cooldown.'
 
-waitingForAlias: '&a%command% &7selected, please say what alias you'd like to add to the cooldown'
+waitingForAlias: '&a%command% &7selected, please say what alias you would like to add to the cooldown'

@@ -101,6 +101,7 @@ public class BaseCommand implements CommandExecutor {
 		cmds.add("  &7/cc add [cooldown] [command] [arg1] [arg2]...");
 		cmds.add("  &7/cc newalias [alias] [command]");
 		cmds.add("  &7/cc remove [command...]");
+		cmds.add("  &7/cc cancel &aExit any editor");
 		cmds.add("  &7Permission &aAdd 'commandcooldowns.byass.command_name' To bypass one command");
 	}
 }

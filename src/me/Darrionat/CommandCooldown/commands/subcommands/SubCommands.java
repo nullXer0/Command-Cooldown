@@ -43,6 +43,7 @@ public class SubCommands extends BaseCommand {
 	private final String addArgumentsPermission = commandBasePermission + "addarguments";
 	private final String removePermission = commandBasePermission + "remove";
 	private final String addAliasPermission = commandBasePermission + "addalias";
+	private final String listPermission = commandBasePermission + "list";
 
 	// Returns if the command is a subcommand or not
 	public boolean isSubCommand(Player p, String[] args) {
@@ -130,6 +131,8 @@ public class SubCommands extends BaseCommand {
 	}
 
 	private void list() {
+		if (!playerHasPermission(listPermission))
+			return;
 		p.sendMessage(Utils.chat("&a&lCOMMAND COOLDOWN LIST\n"));
 
 		FileConfiguration cooldownsConfig = fileManager.getDataConfig("cooldowns");

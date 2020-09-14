@@ -1,12 +1,12 @@
 name: CommandCooldown
 main: me.Darrionat.CommandCooldown.CommandCooldown
 description: An easy way to add cooldowns to commands
-version: 2.0 BETA-1
+version: 2.0 BETA-2
 
 commands:
   commandcooldown:
     aliases: [cc, commandcd, cmdcd]
-    usage: </command> <help/list/add/remove/reload/bypass/newalias>
+    usage: </command> <help/list/add/remove/reload/bypass/addalias>
   cooldowns:
     aliases: [cd]
     usage: </command>
