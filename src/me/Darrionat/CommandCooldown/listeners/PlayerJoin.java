@@ -21,33 +21,34 @@ public class PlayerJoin implements Listener {
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
-		if (plugin.getConfig().getBoolean("checkUpdates") != true) {
+		if (!plugin.getConfig().getBoolean("checkUpdates"))
 			return;
-		}
+
 		UpdateChecker updater = new UpdateChecker(plugin, 73696);
 		try {
-			if (updater.checkForUpdates()) {
-				Player p = e.getPlayer();
-				if (!p.isOp()) {
-					return;
-				}
-				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-
-					public void run() {
-						String version = "v" + plugin.getDescription().getVersion();
-						String latestVersion = UpdateChecker.getLatestVersion();
-						p.sendMessage(Utils.chat("&eUpdate available! &bCommandCooldown is currently on " + version));
-						p.sendMessage(Utils.chat("&bDownload version " + latestVersion + " here!"));
-						p.sendMessage(Utils
-								.chat("https://www.spigotmc.org/resources/command-cooldown-1-7-1-15-support.73696/"));
-					}
-				}, 30L);// 60 L == 3 sec, 20 ticks == 1 sec
-
-			}
+			if (!updater.checkForUpdates())
+				return;
 		} catch (Exception exe) {
 			plugin.getLogger().info("Could not check for updates! Stacktrace:");
 			exe.printStackTrace();
+			return;
+
 		}
+		Player p = e.getPlayer();
+		if (!p.isOp())
+			return;
+
+		String version = "v" + plugin.getDescription().getVersion();
+		String latestVersion = UpdateChecker.getLatestVersion();
+
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			public void run() {
+				p.sendMessage(Utils.chat("&eUpdate available! &bCommandCooldown is currently on " + version));
+				p.sendMessage(Utils.chat("&bDownload version " + latestVersion + " here!"));
+				p.sendMessage(
+						Utils.chat("https://www.spigotmc.org/resources/command-cooldown-1-7-1-15-support.73696/"));
+			}
+		}, 30L);// 60 L == 3 sec, 20 ticks == 1 sec
 
 	}
 }
