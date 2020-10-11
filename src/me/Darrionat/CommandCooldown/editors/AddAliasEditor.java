@@ -60,7 +60,7 @@ public class AddAliasEditor implements Listener, Editor {
 		awaitingAliasSet.add(uuid);
 		commandUUIDMap.put(uuid, new Command(sentMessage, plugin));
 
-		p.sendMessage(messages.getMessage(messages.waitingForAlias));
+		p.sendMessage(messages.getMessage(messages.waitingForAlias).replace("%command%", sentMessage));
 	}
 
 	// Indicator that the player is ready to send the alias in chat

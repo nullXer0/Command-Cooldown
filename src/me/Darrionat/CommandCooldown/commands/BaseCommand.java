@@ -86,22 +86,23 @@ public class BaseCommand implements CommandExecutor {
 			if (i == (listSize)) {
 				break;
 			}
-			sender.sendMessage(Utils.chat(cmds.get(i)));
+			sender.sendMessage(Utils.chat("  " + cmds.get(i)));
 		}
 		sender.sendMessage(Utils.chat("&7Page " + String.valueOf(page) + "/" + pageAmt));
 	}
 
 	private void setupCmdMsgs() {
-		cmds.add("  &7/cc help [page] &aInformation on commands");
-		cmds.add("  &7/cc list &aShows a list of all cooldowned commands");
-		cmds.add("  &7/cc bypass &aBypasses cooldowns");
-		cmds.add("  &7/cc reload &aReloads the config.yml");
-		cmds.add("  &7/cooldowns &aShows a player's cooldowns");
-		cmds.add("  &7/cd &aShows a player's cooldowns");
-		cmds.add("  &7/cc add [cooldown] [command] [arg1] [arg2]...");
-		cmds.add("  &7/cc newalias [alias] [command]");
-		cmds.add("  &7/cc remove [command...]");
-		cmds.add("  &7/cc cancel &aExit any editor");
-		cmds.add("  &7Permission &aAdd 'commandcooldowns.byass.command_name' To bypass one command");
+		cmds.add("&7/cc help [page] &aInformation on commands");
+		cmds.add("&7/cc list &aShows a list of all cooldowned commands");
+		cmds.add("&7/cc bypass &aBypasses cooldowns");
+		cmds.add("&7/cc reload &aReloads the config.yml");
+		cmds.add("&7/cooldowns &aShows a player's cooldowns");
+		cmds.add("&7/cd &aShows a player's cooldowns");
+		cmds.add("&7/cc add &aEnter the command cooldown editor");
+		cmds.add("&7/cc addalias &aEnter the alias editor");
+		cmds.add("&7/cc remove &aEnter the cooldown removal editor");
+		cmds.add("&7/cc addargs &aEnter the arguments editor");
+		cmds.add("&7/cc cancel &aExit any editor");
+		cmds.add("&7Permission &aAdd 'commandcooldowns.byass.command_name' To bypass one command");
 	}
 }

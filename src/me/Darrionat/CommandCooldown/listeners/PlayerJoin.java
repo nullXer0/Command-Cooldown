@@ -21,6 +21,10 @@ public class PlayerJoin implements Listener {
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
+		Player p = e.getPlayer();
+		if (!p.isOp())
+			return;
+
 		if (!plugin.getConfig().getBoolean("checkUpdates"))
 			return;
 
@@ -34,9 +38,6 @@ public class PlayerJoin implements Listener {
 			return;
 
 		}
-		Player p = e.getPlayer();
-		if (!p.isOp())
-			return;
 
 		String version = "v" + plugin.getDescription().getVersion();
 		String latestVersion = UpdateChecker.getLatestVersion();

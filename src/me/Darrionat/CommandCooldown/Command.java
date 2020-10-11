@@ -77,15 +77,15 @@ public class Command {
 				}
 			}
 		}
+
+		List<String> aliases = new ArrayList<>();
 		if (commandSectionKey.equals("")) {
 			commandSection = cooldownsConfig.getConfigurationSection(label);
-			return null;
+			return aliases;
 		}
 		commandSection = cooldownsConfig.getConfigurationSection(commandSectionKey);
-		List<String> aliases = new ArrayList<>();
 		aliases.add(commandSectionKey);
 		aliases.addAll(commandSection.getStringList("aliases"));
-
 		return aliases;
 	}
 
