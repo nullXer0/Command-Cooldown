@@ -1,7 +1,7 @@
 name: CommandCooldown
 main: me.Darrionat.CommandCooldown.CommandCooldown
 description: An easy way to add cooldowns to commands
-version: 2.01
+version: 2.02
 
 commands:
   commandcooldown:

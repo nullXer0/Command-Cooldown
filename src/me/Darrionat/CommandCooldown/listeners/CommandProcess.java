@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import me.Darrionat.CommandCooldown.Command;
 import me.Darrionat.CommandCooldown.CommandCooldown;
@@ -86,10 +87,36 @@ public class CommandProcess implements Listener {
 
 		// Duration seconds
 		double duration = command.cooldown;
+		duration = changeCooldownByPermission(command, p, duration);
 		long endOfCooldown = System.currentTimeMillis() + (long) (duration * 1000);
 
 		Cooldown cooldown = new Cooldown(p.getUniqueId(), command.message, endOfCooldown);
 		plugin.cooldownList.add(cooldown);
+	}
+
+	/**
+	 * 
+	 * @param command
+	 * @param p
+	 * @param duration - Original Duration
+	 * @return - Unchanged duration if no permission with new cooldown
+	 */
+	private double changeCooldownByPermission(Command command, Player p, double duration) {
+		// Has permission with different cooldown
+		for (PermissionAttachmentInfo permissionAttachmentInfo : p.getEffectivePermissions()) {
+			String permission = permissionAttachmentInfo.getPermission();
+			String key = command.message.replace(" ", "_");
+			if (!permission.contains("commandcooldown." + key)) {
+				continue;
+			}
+			String timeString = permission.replace("commandcooldown." + key + ".", "");
+			try {
+				duration = Integer.parseInt(timeString);
+			} catch (NumberFormatException exe) {
+				break;
+			}
+		}
+		return duration;
 	}
 
 	private String getCooldownMessage(String command, long endOfCooldown) {
