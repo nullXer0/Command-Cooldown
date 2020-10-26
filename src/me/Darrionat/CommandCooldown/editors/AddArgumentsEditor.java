@@ -65,13 +65,22 @@ public class AddArgumentsEditor implements Listener, Editor {
 		String addArugmentsMessage = messages.getMessage(messages.addArguments);
 		addArugmentsMessage = addArugmentsMessage.replace("%command%", "/" + sentMessage);
 		p.sendMessage(addArugmentsMessage);
+		addedLabelTime = System.currentTimeMillis();
 	}
 
+	/**
+	 * Used to prevent the AsyncPlayerChatEvent from firing both in
+	 * onLabelMessage(AsyncPlayerChatEvent) and onArgumentsMessage()
+	 */
+	private long addedLabelTime = 0;
 	// Indicator that the player is ready to send the arguments in chat
 	public static Set<UUID> awaitingArgumentsSet = new HashSet<>();
 
 	@EventHandler
 	public void onArgumentsMessage(AsyncPlayerChatEvent e) {
+		if (addedLabelTime + 5 > System.currentTimeMillis()) {
+			return;
+		}
 		Player p = e.getPlayer();
 		UUID uuid = p.getUniqueId();
 		String sentMessage = e.getMessage();

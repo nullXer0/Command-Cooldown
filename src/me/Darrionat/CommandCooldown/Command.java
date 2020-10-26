@@ -50,7 +50,7 @@ public class Command {
 	}
 
 	private String[] getArgs() {
-		String argsString = message.replace(label, "");
+		String argsString = message.replace(label + " ", "");
 		try {
 			return argsString.split(" ");
 		} catch (PatternSyntaxException exe) {
@@ -113,15 +113,8 @@ public class Command {
 		}
 
 		// Map of the arguments and their cooldown
-		HashMap<String[], Double> argumentCooldownMap = new HashMap<>();
-		ConfigurationSection cooldownsSection = commandSection.getConfigurationSection("cooldowns");
+		HashMap<String[], Double> argumentCooldownMap = getArgumentCooldownMap();
 
-		for (String cooldownKey : cooldownsSection.getKeys(false)) {
-			if (cooldownKey.equalsIgnoreCase("*"))
-				continue;
-
-			argumentCooldownMap.put(cooldownKey.split(" "), cooldownsSection.getDouble(cooldownKey));
-		}
 		List<String[]> passedArgSet = getPassedArguments(argumentCooldownMap);
 
 		// double baseCooldown = cooldownsSection.getDouble("*");
@@ -147,7 +140,26 @@ public class Command {
 	}
 
 	/**
-	 * Compares sent arguments to cooldowns.yml
+	 * Get the map of all arguments for the command as the keys of the map and their
+	 * cooldowns as the value.
+	 * 
+	 * @return a HashMap of arguments with cooldowns
+	 */
+	private HashMap<String[], Double> getArgumentCooldownMap() {
+		HashMap<String[], Double> argumentCooldownMap = new HashMap<>();
+
+		ConfigurationSection cooldownsSection = commandSection.getConfigurationSection("cooldowns");
+		for (String cooldownKey : cooldownsSection.getKeys(false)) {
+			if (cooldownKey.equalsIgnoreCase("*"))
+				continue;
+			argumentCooldownMap.put(cooldownKey.split(" "), cooldownsSection.getDouble(cooldownKey));
+		}
+		return argumentCooldownMap;
+	}
+
+	/**
+	 * Compares sent arguments to cooldowns.yml. Returns a list of arguments with
+	 * cooldowns that fit the command's arguments.
 	 * 
 	 * @param argumentCooldownMap A HashMap of arguments with their cooldown
 	 * @return
@@ -163,9 +175,10 @@ public class Command {
 				if (cooldownedArgs.length > args.length)
 					continue;
 
-				// A simple catch to prevent bypassing command with
-				// spamming letters at the end. Example:
-				// /warp home a a
+				/*
+				 * A simple catch to prevent bypassing command with spamming letters at the end.
+				 * Example: /warp home a a
+				 */
 				String arg;
 				try {
 					arg = cooldownedArgs[i];
@@ -178,6 +191,7 @@ public class Command {
 					passedArgSet.add(cooldownedArgs);
 				else if (passedArgSet.contains(cooldownedArgs))
 					passedArgSet.remove(cooldownedArgs);
+
 			}
 		}
 		return passedArgSet;
@@ -198,8 +212,11 @@ public class Command {
 		}
 
 		section.set("aliases", aliases);
-		cooldownSection.set("*", cooldown);
-
+		if (args.length == 0)
+			cooldownSection.set("*", cooldown);
+		else {
+			cooldownSection.set(String.join(" ", args), cooldown);
+		}
 		fileManager.saveConfigFile(cooldownsConfig, "cooldowns");
 
 	}
