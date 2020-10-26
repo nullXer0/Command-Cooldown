@@ -50,6 +50,8 @@ public class Command {
 	}
 
 	private String[] getArgs() {
+		if (!message.contains(" "))
+			return null;
 		String argsString = message.replace(label + " ", "");
 		try {
 			return argsString.split(" ");
@@ -167,6 +169,9 @@ public class Command {
 	private List<String[]> getPassedArguments(HashMap<String[], Double> argumentCooldownMap) {
 		List<String[]> passedArgSet = new ArrayList<>();
 
+		if (args == null)
+			return passedArgSet;
+
 		for (int i = 0; i < args.length; i++) {
 			String sentArgument = args[i];
 			for (String[] cooldownedArgs : argumentCooldownMap.keySet()) {
@@ -212,7 +217,8 @@ public class Command {
 		}
 
 		section.set("aliases", aliases);
-		if (args.length == 0)
+
+		if (args == null || args.length == 0)
 			cooldownSection.set("*", cooldown);
 		else {
 			cooldownSection.set(String.join(" ", args), cooldown);
