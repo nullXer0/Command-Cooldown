@@ -80,7 +80,7 @@ public class CommandCooldown extends JavaPlugin {
 			systemLog("Updating " + fileName + ".yml");
 			fileManager.matchConfig(fileName);
 		}
-		if (fileManager.fileExists("cooldowns"))
+		if (!fileManager.fileExists("cooldowns"))
 			saveResource("cooldowns.yml", false);
 	}
 
