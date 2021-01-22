@@ -42,7 +42,7 @@ public class Cooldown {
 		return UUID.fromString(key.split("/")[0]);
 	}
 
-	public static String getCommandFromKey(String key, CommandCooldown plugin) {
+	public static String getCommandFromKey(String key) {
 		return key.split("/")[1].replace("_", " ");
 	}
 

@@ -1,7 +1,5 @@
 package me.Darrionat.CommandCooldown.listeners;
 
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -65,12 +63,10 @@ public class CommandProcess implements Listener {
 	 * @return: Cooldown, null if the player is not on a cooldown for the command
 	 */
 	private Cooldown playerIsOnCooldown(Command command, Player p) {
-		List<Cooldown> cooldownList = plugin.cooldownList;
-
-		for (Cooldown cooldown : cooldownList) {
+		for (Cooldown cooldown : plugin.cooldownList) {
 			if (!cooldown.getCommand().equalsIgnoreCase(command.message))
 				continue;
-			if (cooldown.getPlayerUUID() != p.getUniqueId())
+			if (!cooldown.getPlayerUUID().equals(p.getUniqueId()))
 				continue;
 
 			if (cooldown.getTimeRemainingMillis() <= 0) {
@@ -79,7 +75,6 @@ public class CommandProcess implements Listener {
 			}
 			return cooldown;
 		}
-
 		return null;
 	}
 

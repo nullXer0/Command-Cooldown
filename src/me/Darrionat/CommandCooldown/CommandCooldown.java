@@ -95,7 +95,7 @@ public class CommandCooldown extends JavaPlugin {
 		for (String key : cooldownDataConfig.getKeys(false)) {
 
 			UUID uuid = Cooldown.getUUIDFromKey(key);
-			String command = Cooldown.getCommandFromKey(key, this);
+			String command = Cooldown.getCommandFromKey(key);
 			long endOfCooldown = cooldownDataConfig.getLong(key);
 
 			Cooldown cooldown = new Cooldown(uuid, command, endOfCooldown);
@@ -134,5 +134,4 @@ public class CommandCooldown extends JavaPlugin {
 		editorList.add(new RemoveCommandEditor(this));
 		editorList.add(new AddAliasEditor(this));
 	}
-
 }
