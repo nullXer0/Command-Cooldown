@@ -4,7 +4,7 @@ tpa:
   cooldowns:
     # This * symbol must be here! This is the base cooldown for the entire command.
     # Set this cooldown to 0 if you only want cooldowns on certain arguments
-    *: 60
+    '*': 60
     # These are the arguments
     Notch: 30
     Darrionat: 30
@@ -14,9 +14,9 @@ tpa:
     - tpahere
 repair:
   cooldowns:
-    *: 30
+    '*': 30
     hand: 20
-    abc *: 50
+    'abc *': 50
     abc d: 40
   aliases:
     - repairs
