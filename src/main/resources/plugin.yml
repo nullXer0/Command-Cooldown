@@ -1,0 +1,22 @@
+name: CommandCooldown
+main: me.darrionat.commandcooldown.CommandCooldownPlugin
+description: An easy way to add cooldowns to commands
+version: 2.2.0
+
+commands:
+  commandcooldown:
+    aliases: [ cc, commandcd, cmdcd ]
+    usage: </command> <editor/reload>
+
+permissions:
+  commandcooldown.*:
+    description: Gives access to all CommandCooldown commands
+    children:
+      commandcooldown.admin: true
+      commandcooldown.cooldowns: true
+  commandcooldown.use:
+    description: Allows a player to use all commands
+    default: op
+  commandcooldown.cooldowns:
+    description: Allows a player to see their active cooldowns
+    default: true

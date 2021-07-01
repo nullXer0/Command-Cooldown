@@ -1,0 +1,7 @@
+warp:
+  cooldowns:
+    '*': 30m
+    'shop': 15m
+    'vip': 30s
+  aliases:
+    - 'ewarp'
