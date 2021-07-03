@@ -83,7 +83,7 @@ public class MessageService implements IMessageService {
     @Override
     public void sendHelpHeader(CommandSender sender, int page, int pageAmount) {
         String msg = messageRepo.getMessage("helpHeader");
-        msg = msg.replace("page", String.valueOf(page));
+        msg = msg.replace("%page%", String.valueOf(page));
         msg = msg.replace("%pageAmount%", String.valueOf(pageAmount));
         sendMessage(sender, msg);
     }

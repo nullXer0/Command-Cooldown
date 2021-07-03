@@ -127,10 +127,8 @@ public class CooldownService implements ICooldownService {
         // Clone to avoid changing the original cooldown
         Cooldown clone = cooldown.clone();
         // Build permission
-        StringBuilder builder = new StringBuilder(cooldown.getCommand().getLabel());
-        builder.append("_").append(String.join("_", cooldown.getArgs()));
         // commandcooldown.commandPerm.duration
-        String commandPerm = builder.toString();
+        String commandPerm = cooldown.getCommand().getLabel() + "_" + String.join("_", cooldown.getArgs());
         for (PermissionAttachmentInfo permissionAttachmentInfo : p.getEffectivePermissions()) {
             String permission = permissionAttachmentInfo.getPermission();
             if (!permission.contains("commandcooldown." + commandPerm)) continue;

@@ -41,7 +41,7 @@ public class CommandCooldownPlugin extends Plugin {
         cooldownService.loadAllCooldowns();
 
         new CommandCooldownCommand(this, messageService);
-        new PlayerCommandPreprocess(this, cooldownService, bypassService, messageService);
+        new PlayerCommandPreprocess(this, configRepo, cooldownService, bypassService, messageService);
         new PlayerJoin(this, configRepo);
     }
 
