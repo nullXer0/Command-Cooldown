@@ -21,7 +21,7 @@ public class AnvilPrompt extends Prompt {
                     if (!task.valid(text))
                         return AnvilGUI.Response.text(task.onFail());
                     if (task.complete())
-                        return AnvilGUI.Response.openInventory(task.run(text));
+                        return AnvilGUI.Response.openInventory(task.run());
                     else
                         return AnvilGUI.Response.text(task.promptText());
 

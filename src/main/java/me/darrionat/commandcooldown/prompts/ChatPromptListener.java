@@ -66,7 +66,7 @@ public class ChatPromptListener implements Listener {
             return;
         }
         if (task.complete()) {
-            p.openInventory(task.run(text));
+            p.openInventory(task.run());
             ACTIVE_TASKS.remove(task);
         } else
             p.sendMessage(Utils.chat(task.promptText()));

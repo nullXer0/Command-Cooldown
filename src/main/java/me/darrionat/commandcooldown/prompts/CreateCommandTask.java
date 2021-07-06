@@ -15,13 +15,13 @@ public class CreateCommandTask extends DurationTask {
     }
 
     @Override
-    public Inventory run(String text) {
+    public Inventory run() {
         if (!complete())
             throw new IllegalStateException("Task is not complete");
-        SavedCommand command = new SavedCommand(text);
+        SavedCommand command = new SavedCommand(label);
         Cooldown baseCooldown = new Cooldown(command, duration);
         commandService.addCooldown(command, baseCooldown);
-        return new CommandEditorGui(plugin, command, 1).getInventory(p);
+        return new CommandEditorGui(plugin, commandService.getCommand(label), 1).getInventory(p);
     }
 
     @Override
@@ -40,7 +40,8 @@ public class CreateCommandTask extends DurationTask {
 
     @Override
     public boolean valid(String input) {
-        if (label == null && !input.contains(" ")) {
+        if (label == null) {
+            if (input.contains(" ")) return false;
             label = input;
             return true;
         }

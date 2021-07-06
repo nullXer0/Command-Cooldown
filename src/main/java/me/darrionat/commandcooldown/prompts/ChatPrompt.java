@@ -1,9 +1,7 @@
 package me.darrionat.commandcooldown.prompts;
 
-import me.darrionat.commandcooldown.CommandCooldownPlugin;
-
 public class ChatPrompt extends Prompt {
-    public ChatPrompt(CommandCooldownPlugin plugin, Task task) {
+    public ChatPrompt(Task task) {
         super(task);
     }
 

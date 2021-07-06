@@ -25,12 +25,11 @@ public abstract class Task {
     /**
      * Executed once the prompt is completed.
      *
-     * @param input The input string from the prompt.
      * @return The inventory that is opened when the task is finished.
      * @throws IllegalStateException thrown when the task is ran when not completed.
      * @see #complete()
      */
-    public abstract Inventory run(String input) throws IllegalStateException;
+    public abstract Inventory run() throws IllegalStateException;
 
     /**
      * The text that is prompted to the player when they first open the prompt.

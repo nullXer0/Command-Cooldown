@@ -20,4 +20,12 @@ public interface ICooldownsRepository extends Repository {
      * @param command The command to remove.
      */
     void removeCommandCooldown(SavedCommand command);
+
+    /**
+     * Loads a saved command from the config.
+     *
+     * @param label The command to fetch.
+     * @return The loaded {@code SavedCommand}.
+     */
+    SavedCommand getSavedCommand(String label);
 }

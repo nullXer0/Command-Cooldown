@@ -4,8 +4,7 @@ import java.util.UUID;
 
 public class PlayerCooldown {
     /**
-     * The special character that is used to separate values when the {@code PlayerCooldown}
-     * is converted to a string.
+     * The special character that is used to separate values when the {@code PlayerCooldown} is converted to a string.
      */
     public static final String SEP = "/";
     private final UUID uuid;
@@ -37,13 +36,12 @@ public class PlayerCooldown {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-
-        builder.append(uuid).append(SEP)
-                .append(cooldown.getCommand().getLabel()).append(SEP);
-
         String args = String.join(" ", cooldown.getArgs());
 
-        builder.append(args).append(SEP)
+        builder.append(uuid).append(SEP)
+                .append(cooldown.getCommand().getLabel()).append(SEP)
+                .append(args).append(SEP)
+                .append(cooldown.getDuration()).append(SEP)
                 .append(end);
 
         return builder.toString();

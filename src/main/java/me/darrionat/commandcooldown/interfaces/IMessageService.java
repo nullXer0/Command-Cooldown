@@ -15,6 +15,8 @@ public interface IMessageService extends Service {
      */
     void sendBypassMessage(Player p);
 
+    void sendStopBypassMessage(Player p);
+
     /**
      * Informs a player that they still have a cooldown on a command.
      *

@@ -9,10 +9,7 @@ import me.darrionat.commandcooldown.interfaces.ISavedCooldownsRepository;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class CooldownService implements ICooldownService {
     private final ICooldownsRepository cooldownsRepo;
@@ -22,7 +19,7 @@ public class CooldownService implements ICooldownService {
      * <p>
      * The key is the player's UUID and the value is the time that the cooldown expires.
      */
-    private final List<PlayerCooldown> cooldowns = new ArrayList<>();
+    private final Set<PlayerCooldown> cooldowns = new HashSet<>();
 
     public CooldownService(ICooldownsRepository cooldownsRepo, ISavedCooldownsRepository savedCooldownsRepo) {
         this.cooldownsRepo = cooldownsRepo;
@@ -97,29 +94,31 @@ public class CooldownService implements ICooldownService {
     public void giveCooldown(Player p, Cooldown cooldown) {
         if (cooldown == null) return;
         long current = System.currentTimeMillis();
-        double cooldownMS = cooldown.getDuration() * 1000;
-        long end = (long) (current + cooldownMS);
+        long cooldownMS = (long) (cooldown.getDuration() * 1000);
+        long end = current + cooldownMS;
         cooldowns.add(buildPlayerCooldown(p, cooldown, end));
     }
 
     @Override
-    public long getRemainingCooldown(Player p, Cooldown cooldown) {
+    public double getRemainingCooldown(Player p, Cooldown cooldown) {
         PlayerCooldown cd = getPlayerCooldown(p, cooldown);
         if (cd == null) return 0;
         long end = cd.getEnd();
         long rem = end - System.currentTimeMillis();
-        return Math.max(rem, 0);
+        return Math.max(rem / 1000, 0);
     }
 
     @Override
     public boolean playerHasCooldown(Player p, Cooldown cooldown) {
         PlayerCooldown cd = getPlayerCooldown(p, cooldown);
+        System.out.println("Gettin cooldown");
+        System.out.println(cd);
         if (cd == null) return false;
         boolean expired = cd.expired();
         // Cooldown is expired, remove from list
         if (expired)
             cooldowns.remove(cd);
-        return expired;
+        return !expired;
     }
 
     @Override
@@ -147,10 +146,14 @@ public class CooldownService implements ICooldownService {
 
     @Override
     public void loadAllCooldowns() {
-        List<PlayerCooldown> loadedCooldowns = savedCooldownsRepo.loadAllCooldowns();
-        for (PlayerCooldown cd : loadedCooldowns)
-            if (!cd.expired())
+        Collection<PlayerCooldown> loadedCooldowns = savedCooldownsRepo.loadAllCooldowns();
+        for (PlayerCooldown cd : loadedCooldowns) {
+            if (!cd.expired()) {
+                System.out.println("Found saved cooldown " + cd);
+                System.out.println(cd.getCooldown().toCommandString());
                 cooldowns.add(cd);
+            }
+        }
     }
 
     @Override
@@ -164,9 +167,12 @@ public class CooldownService implements ICooldownService {
 
     private PlayerCooldown getPlayerCooldown(Player p, Cooldown cooldown) {
         UUID uuid = p.getUniqueId();
-        for (PlayerCooldown cd : cooldowns)
+        for (PlayerCooldown cd : cooldowns) {
+            System.out.println(cd.getPlayer());
+            System.out.println(cd.getCooldown());
             if (cd.getPlayer().equals(uuid) && cd.getCooldown().equals(cooldown))
                 return cd;
+        }
         return null;
     }
 }

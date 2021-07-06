@@ -16,7 +16,6 @@ import java.util.List;
 public class CooldownsRepository implements ICooldownsRepository {
     private final CommandCooldownPlugin plugin;
     private final Config config;
-    private final List<SavedCommand> savedCommands = new ArrayList<>();
     private FileConfiguration file;
 
     public CooldownsRepository(CommandCooldownPlugin plugin) {
@@ -29,24 +28,16 @@ public class CooldownsRepository implements ICooldownsRepository {
 
     public void init() {
         file = config.getFileConfiguration();
-        savedCommands.clear();
     }
 
     public List<SavedCommand> getCommandCooldowns() {
-        if (!savedCommands.isEmpty())
-            return savedCommands;
+        List<SavedCommand> toReturn = new ArrayList<>();
         for (String label : file.getKeys(false))
-            savedCommands.add(getSavedCommand(label));
-        return savedCommands;
+            toReturn.add(getSavedCommand(label));
+        return toReturn;
     }
 
-    /**
-     * Loads a saved command from the config.
-     *
-     * @param label The command to fetch.
-     * @return The loaded {@code SavedCommand}.
-     */
-    private SavedCommand getSavedCommand(String label) {
+    public SavedCommand getSavedCommand(String label) {
         SavedCommand command = new SavedCommand(label);
 
         ConfigurationSection section = file.getConfigurationSection(label);
@@ -67,7 +58,6 @@ public class CooldownsRepository implements ICooldownsRepository {
 
     @Override
     public void addCommandCooldown(SavedCommand command) {
-        savedCommands.add(command);
         String label = command.getLabel();
         file.createSection(label);
         ConfigurationSection section = file.getConfigurationSection(label);
@@ -83,7 +73,6 @@ public class CooldownsRepository implements ICooldownsRepository {
 
     @Override
     public void removeCommandCooldown(SavedCommand command) {
-        savedCommands.remove(command);
         file.set(command.getLabel(), null);
         config.save(file);
     }

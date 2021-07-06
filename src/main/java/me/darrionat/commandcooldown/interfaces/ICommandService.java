@@ -13,4 +13,6 @@ public interface ICommandService {
     void removeCooldown(SavedCommand command, Cooldown cooldown);
 
     void setCooldown(Cooldown cooldown, double duration);
+
+    SavedCommand getCommand(String label);
 }

@@ -9,6 +9,7 @@ import me.darrionat.commandcooldown.gui.CooldownsGui;
 import me.darrionat.commandcooldown.interfaces.*;
 import me.darrionat.commandcooldown.listeners.PlayerCommandPreprocess;
 import me.darrionat.commandcooldown.listeners.PlayerJoin;
+import me.darrionat.commandcooldown.prompts.ChatPromptListener;
 import me.darrionat.commandcooldown.statics.Bootstrapper;
 import me.darrionat.commandcooldown.utils.Errors;
 import me.darrionat.pluginlib.Plugin;
@@ -40,9 +41,10 @@ public class CommandCooldownPlugin extends Plugin {
         // Load saved cooldowns
         cooldownService.loadAllCooldowns();
 
-        new CommandCooldownCommand(this, messageService);
+        new CommandCooldownCommand(this, messageService, bypassService);
         new PlayerCommandPreprocess(this, configRepo, cooldownService, bypassService, messageService);
         new PlayerJoin(this, configRepo);
+        new ChatPromptListener(this);
     }
 
     private void initFields() {
@@ -112,7 +114,8 @@ public class CommandCooldownPlugin extends Plugin {
      * @param page    The page of the menu to open.
      */
     public void openCommandEditor(Player p, SavedCommand command, int page) {
-        Gui gui = new CommandEditorGui(this, command, page);
+        SavedCommand configCommand = getCommandService().getCommand(command.getLabel());
+        Gui gui = new CommandEditorGui(this, configCommand, page);
         openMenu(p, gui);
     }
 

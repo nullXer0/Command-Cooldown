@@ -38,7 +38,7 @@ public class CooldownEditorGui extends Gui {
     @Override
     public void clicked(Player p, int slot, ClickType clickType) {
         if (slot == CHANGE_COOLDOWN_SLOT) {
-            Prompt prompt = new ChatPrompt(plugin, new DurationTask(plugin, cooldown, p));
+            Prompt prompt = new ChatPrompt(new DurationTask(plugin, cooldown, p));
             prompt.openPrompt();
         } else if (slot == BACK_MENU_SLOT) {
             plugin.openCommandEditor(p, cooldown.getCommand(), 1);

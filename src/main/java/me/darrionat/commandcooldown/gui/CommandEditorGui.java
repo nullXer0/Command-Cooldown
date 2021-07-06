@@ -8,12 +8,12 @@ import me.darrionat.commandcooldown.prompts.ChatPrompt;
 import me.darrionat.commandcooldown.prompts.CreateCooldownTask;
 import me.darrionat.commandcooldown.prompts.Prompt;
 import me.darrionat.pluginlib.guis.Gui;
+import me.darrionat.pluginlib.utils.Utils;
 import me.darrionat.shaded.xseries.XMaterial;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class CommandEditorGui extends Gui {
@@ -29,7 +29,6 @@ public class CommandEditorGui extends Gui {
     private final SavedCommand command;
     private final int page;
     private final ICommandService commandService;
-    private final HashMap<Integer, Cooldown> cooldownSlots = new HashMap<>();
 
     public CommandEditorGui(CommandCooldownPlugin plugin, SavedCommand command, int page) {
         super(plugin, "Command Editor - /" + command.getLabel(), 6);
@@ -42,9 +41,8 @@ public class CommandEditorGui extends Gui {
 
     @Override
     protected void getContents(Player p) {
+        Cooldown base = command.getBaseCooldown();
         if (command.hasBaseCooldown()) {
-            Cooldown base = command.getBaseCooldown();
-            cooldownSlots.put(0, base);
             double duration = base.getDuration();
             createItem(BASE_COOLDOWN_MATERIAL, 1, BASE_COOLDOWN_SLOT, "&eBase Cooldown &7*",
                     "&7Duration: &a" + duration + "s",
@@ -55,13 +53,16 @@ public class CommandEditorGui extends Gui {
         }
         // Show cooldowns
         List<Cooldown> cooldowns = command.getCooldowns();
+        p.sendMessage(Utils.chat("&bCreating GUI"));
+        p.sendMessage("List size: " + cooldowns.size());
+
         int pageDiff = (page - 1) * AMT_PER_PAGE;
-        for (int i = 0; i < AMT_PER_PAGE && i + pageDiff < cooldowns.size(); i++) {
+        for (int i = 1; i < AMT_PER_PAGE && i + pageDiff < cooldowns.size(); i++) {
             Cooldown cooldown = cooldowns.get(i);
-            cooldownSlots.put(i, cooldown);
+            p.sendMessage(cooldown.toCommandString());
+            if (cooldown.equals(base)) continue;
             double duration = cooldown.getDuration();
-            // +1 to slot to accommodate for base cooldown
-            createItem(COOLDOWN, 1, i + 1,
+            createItem(COOLDOWN, 1, i,
                     "&e" + String.join(" ", cooldown.getArgs()),
                     "&7Duration: &a" + duration + "s",
                     "&7Left-Click to &aedit &7cooldown",
@@ -86,7 +87,7 @@ public class CommandEditorGui extends Gui {
         if (clickedItem == null) return;
         // Create new cooldown
         if (slot == CooldownsGui.CREATE_SLOT) {
-            Prompt prompt = new ChatPrompt(plugin, new CreateCooldownTask(plugin, command, p));
+            Prompt prompt = new ChatPrompt(new CreateCooldownTask(plugin, command, p));
             prompt.openPrompt();
             return;
         }
@@ -99,7 +100,9 @@ public class CommandEditorGui extends Gui {
             switchPage(p, slot);
             return;
         }
-        Cooldown cooldown = cooldownSlots.get(slot);
+        List<Cooldown> cooldowns = command.getCooldowns();
+        if (slot >= cooldowns.size()) return;
+        Cooldown cooldown = command.getCooldowns().get(slot);
         // Edit cooldown or delete it
         if (cooldown != null) {
             if (clickType == ClickType.LEFT) {

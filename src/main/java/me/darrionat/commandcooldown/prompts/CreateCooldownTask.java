@@ -17,7 +17,7 @@ public class CreateCooldownTask extends DurationTask {
     }
 
     @Override
-    public Inventory run(String input) {
+    public Inventory run() {
         if (!complete())
             throw new IllegalStateException("Task is not complete");
         Cooldown cooldown = new Cooldown(command, args, duration);

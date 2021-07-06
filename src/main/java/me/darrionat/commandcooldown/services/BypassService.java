@@ -25,7 +25,9 @@ public class BypassService implements IBypassService {
 
     @Override
     public boolean playerIsBypassing(Cooldown cooldown, Player p) {
-        if (sudoBypass.contains(p)) return true;
+        boolean sudo = sudoBypass.contains(p);
+        if (cooldown == null) return sudo;
+        if (sudo) return true;
         // Build permission
         String label = cooldown.getCommand().getLabel();
         String argsStr = String.join("_", cooldown.getArgs());

@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -26,7 +25,6 @@ public class CooldownsGui extends Gui {
     public final static int NEXT_PAGE_SLOT = 53;
     private final CommandCooldownPlugin plugin;
     private final int page;
-    private final HashMap<Integer, SavedCommand> commandSlots = new HashMap<>();
 
     public CooldownsGui(CommandCooldownPlugin plugin, int page) {
         super(plugin, plugin.getName(), 6);
@@ -41,7 +39,6 @@ public class CooldownsGui extends Gui {
         int pageDiff = (page - 1) * AMT_PER_PAGE;
         for (int i = 0; i < AMT_PER_PAGE && i + pageDiff < commands.size(); i++) {
             SavedCommand command = commands.get(i + pageDiff);
-            commandSlots.put(i, command);
             createItem(XMaterial.CHEST, 1, i, "&f&l/" + command.getLabel(), "&7Left-Click to edit this command");
         }
 
@@ -58,7 +55,7 @@ public class CooldownsGui extends Gui {
         if (clickedItem == null) return;
         // Create new command cooldown
         if (slot == CREATE_SLOT) {
-            Prompt prompt = new ChatPrompt(plugin, new CreateCommandTask(plugin, p));
+            Prompt prompt = new ChatPrompt(new CreateCommandTask(plugin, p));
             prompt.openPrompt();
             return;
         }
@@ -70,7 +67,9 @@ public class CooldownsGui extends Gui {
             switchPage(p, slot);
             return;
         }
-        SavedCommand command = commandSlots.get(slot);
+        List<SavedCommand> commands = plugin.getCommandCooldowns();
+        if (slot >= commands.size()) return;
+        SavedCommand command = commands.get(slot);
         if (command != null)
             plugin.openCommandEditor(p, command, 1);
     }

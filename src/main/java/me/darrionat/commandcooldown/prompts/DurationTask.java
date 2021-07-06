@@ -2,6 +2,7 @@ package me.darrionat.commandcooldown.prompts;
 
 import me.darrionat.commandcooldown.CommandCooldownPlugin;
 import me.darrionat.commandcooldown.cooldowns.Cooldown;
+import me.darrionat.commandcooldown.cooldowns.SavedCommand;
 import me.darrionat.commandcooldown.gui.CommandEditorGui;
 import me.darrionat.commandcooldown.interfaces.ICommandService;
 import me.darrionat.commandcooldown.utils.Duration;
@@ -29,11 +30,12 @@ public class DurationTask extends Task {
     }
 
     @Override
-    public Inventory run(String input) {
+    public Inventory run() {
         if (!complete())
             throw new IllegalStateException("Task is not complete");
         commandService.setCooldown(cooldown, duration);
-        return new CommandEditorGui(plugin, cooldown.getCommand(), 1).getInventory(p);
+        SavedCommand command = commandService.getCommand(cooldown.getCommand().getLabel());
+        return new CommandEditorGui(plugin, command, 1).getInventory(p);
     }
 
     @Override

@@ -32,6 +32,11 @@ public class MessageService implements IMessageService {
     }
 
     @Override
+    public void sendStopBypassMessage(Player p) {
+        sendMessage(p, messageRepo.getMessage("noLongerBypassing"));
+    }
+
+    @Override
     public void sendCooldownMessage(Player p, Cooldown cooldown, double remainingCooldown) {
         String msg = messageRepo.getMessage("onCooldown");
         String duration = Duration.toDurationString(remainingCooldown);

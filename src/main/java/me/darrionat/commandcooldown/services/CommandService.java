@@ -47,4 +47,9 @@ public class CommandService implements ICommandService {
         cooldown.setDuration(duration);
         cooldownsRepo.addCommandCooldown(command);
     }
+
+    @Override
+    public SavedCommand getCommand(String label) {
+        return cooldownsRepo.getSavedCommand(label);
+    }
 }
