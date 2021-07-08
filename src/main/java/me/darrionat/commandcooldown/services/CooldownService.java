@@ -70,7 +70,7 @@ public class CooldownService implements ICooldownService {
             int amtMatched = 0;
             List<String> cooldownArgs = cooldown.getArgs();
             // Loop over arguments. All need to match to be valid
-            for (int i = 0; i < cooldownArgs.size(); i++) {
+            for (int i = 0; i < cooldownArgs.size() && i < args.size(); i++) {
                 String arg = cooldownArgs.get(i);
                 // Sent arguments don't match defined cooldown arguments
                 // Incompatible cooldown arguments
@@ -111,8 +111,6 @@ public class CooldownService implements ICooldownService {
     @Override
     public boolean playerHasCooldown(Player p, Cooldown cooldown) {
         PlayerCooldown cd = getPlayerCooldown(p, cooldown);
-        System.out.println("Gettin cooldown");
-        System.out.println(cd);
         if (cd == null) return false;
         boolean expired = cd.expired();
         // Cooldown is expired, remove from list
@@ -148,11 +146,8 @@ public class CooldownService implements ICooldownService {
     public void loadAllCooldowns() {
         Collection<PlayerCooldown> loadedCooldowns = savedCooldownsRepo.loadAllCooldowns();
         for (PlayerCooldown cd : loadedCooldowns) {
-            if (!cd.expired()) {
-                System.out.println("Found saved cooldown " + cd);
-                System.out.println(cd.getCooldown().toCommandString());
+            if (!cd.expired())
                 cooldowns.add(cd);
-            }
         }
     }
 
@@ -168,8 +163,6 @@ public class CooldownService implements ICooldownService {
     private PlayerCooldown getPlayerCooldown(Player p, Cooldown cooldown) {
         UUID uuid = p.getUniqueId();
         for (PlayerCooldown cd : cooldowns) {
-            System.out.println(cd.getPlayer());
-            System.out.println(cd.getCooldown());
             if (cd.getPlayer().equals(uuid) && cd.getCooldown().equals(cooldown))
                 return cd;
         }
