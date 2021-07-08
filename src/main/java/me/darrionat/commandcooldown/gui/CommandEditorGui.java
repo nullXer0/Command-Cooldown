@@ -17,14 +17,15 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 public class CommandEditorGui extends Gui {
+    // Subtract 1 for base cooldown
+    public final static int AMT_PER_PAGE = CooldownsGui.AMT_PER_PAGE - 1;
+    public final static int BASE_COOLDOWN_SLOT = 0;
+    public final static int BACK_MENU_SLOT = CooldownsGui.CREATE_SLOT - 1;
+    public final static int ALIASES_SLOT = BACK_MENU_SLOT - 1;
     private static final XMaterial BASE_COOLDOWN_MATERIAL = XMaterial.GREEN_WOOL;
     private static final XMaterial NO_BASE_COOLDOWN_MATERIAL = XMaterial.RED_WOOL;
     private static final XMaterial COOLDOWN = XMaterial.LIME_WOOL;
-    // Subtract 1 for base cooldown
-    private final static int AMT_PER_PAGE = CooldownsGui.AMT_PER_PAGE - 1;
-    private final static int BASE_COOLDOWN_SLOT = 0;
-    private final static int BACK_MENU_SLOT = CooldownsGui.CREATE_SLOT - 1;
-
+    public static final XMaterial ALIASES = XMaterial.OAK_SIGN;
     private final CommandCooldownPlugin plugin;
     private final SavedCommand command;
     private final int page;
@@ -68,17 +69,18 @@ public class CommandEditorGui extends Gui {
                     "&7Left-Click to &aedit &7cooldown",
                     "&7Right-Click to &cdelete &7cooldown");
         }
+        // Sign, aliases menu
+        createItem(ALIASES, 1, ALIASES_SLOT, "&eEdit Aliases",
+                "&7Left-Click to enter the", "&7aliases editor");
         // Go back item
         createItem(CooldownsGui.PAGE_SWITCH, 1, BACK_MENU_SLOT, "&7Go Back");
         // Create cooldown slot
-        createItem(XMaterial.LIME_WOOL, 1, CooldownsGui.CREATE_SLOT,
+        createItem(CooldownsGui.CREATE, 1, CooldownsGui.CREATE_SLOT,
                 "&aCreate Command Cooldown", "&7Left-Click to enter the", "&7cooldown editor");
         if (page > 1) // Not on first page
             createItem(CooldownsGui.PAGE_SWITCH, 1, CooldownsGui.PREV_PAGE_SLOT, "&fPrevious Page");
         if (page * AMT_PER_PAGE < cooldowns.size()) // There are more afterwards
             createItem(CooldownsGui.PAGE_SWITCH, 1, CooldownsGui.NEXT_PAGE_SLOT, "&fNext Page");
-
-        // TODO Sign -> Aliases menu
     }
 
     @Override
@@ -95,7 +97,10 @@ public class CommandEditorGui extends Gui {
             plugin.openCooldownsEditor(p, 1);
             return;
         }
-
+        if (slot == ALIASES_SLOT) {
+            plugin.openAliasesEditor(p, command, 1);
+            return;
+        }
         if (clickedItem.getType() == CooldownsGui.PAGE_SWITCH.parseMaterial()) {
             switchPage(p, slot);
             return;
@@ -128,9 +133,9 @@ public class CommandEditorGui extends Gui {
     private void switchPage(Player p, int slot) {
         if (slot == CooldownsGui.PREV_PAGE_SLOT) {
             plugin.openCommandEditor(p, command, page - 1);
-            return;
+        } else {
+            assert slot == CooldownsGui.NEXT_PAGE_SLOT;
+            plugin.openCommandEditor(p, command, page + 1);
         }
-        assert slot == CooldownsGui.NEXT_PAGE_SLOT;
-        plugin.openCommandEditor(p, command, page + 1);
     }
 }

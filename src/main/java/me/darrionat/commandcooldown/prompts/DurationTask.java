@@ -6,6 +6,7 @@ import me.darrionat.commandcooldown.cooldowns.SavedCommand;
 import me.darrionat.commandcooldown.gui.CommandEditorGui;
 import me.darrionat.commandcooldown.interfaces.ICommandService;
 import me.darrionat.commandcooldown.utils.Duration;
+import me.darrionat.pluginlib.utils.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -40,17 +41,17 @@ public class DurationTask extends Task {
 
     @Override
     public String promptText() {
-        return "Enter a duration (s/m/h/d/w/y)";
+        return Utils.chat("&aEnter a duration (s/m/h/d/w/y)");
     }
 
     @Override
     public String onFail() {
-        return "Invalid duration";
+        return Utils.chat("&cInvalid duration");
     }
 
     @Override
     public boolean valid(String input) {
-        if (duration != -1) // Already valid
+        if (complete()) // Already valid
             return true;
         // Duration not valid yet
         try {

@@ -17,6 +17,7 @@ import java.util.List;
  * The default menu for the plugin.
  */
 public class CooldownsGui extends Gui {
+    public final static XMaterial CREATE = XMaterial.GREEN_WOOL;
     public final static XMaterial FILLER = XMaterial.BLACK_STAINED_GLASS_PANE;
     public final static XMaterial PAGE_SWITCH = XMaterial.ARROW;
     public final static int AMT_PER_PAGE = 9 * 5;
@@ -42,7 +43,8 @@ public class CooldownsGui extends Gui {
             createItem(XMaterial.CHEST, 1, i, "&f&l/" + command.getLabel(), "&7Left-Click to edit this command");
         }
 
-        createItem(XMaterial.LIME_WOOL, 1, CREATE_SLOT, "&aCreate Command Cooldown", "&7Left-Click to enter the", "&7command cooldown editor");
+        createItem(CREATE, 1, CREATE_SLOT, "&aCreate Command Cooldown",
+                "&7Left-Click to enter the", "&7command cooldown editor");
         if (page > 1) // Not on first page
             createItem(PAGE_SWITCH, 1, PREV_PAGE_SLOT, "&fPrevious Page");
         if (page * AMT_PER_PAGE < commands.size()) // There are more afterwards
@@ -88,9 +90,9 @@ public class CooldownsGui extends Gui {
     private void switchPage(Player p, int slot) {
         if (slot == PREV_PAGE_SLOT) {
             plugin.openCooldownsEditor(p, page - 1);
-            return;
+        } else {
+            assert slot == NEXT_PAGE_SLOT;
+            plugin.openCooldownsEditor(p, page + 1);
         }
-        assert slot == NEXT_PAGE_SLOT;
-        plugin.openCooldownsEditor(p, page + 1);
     }
 }

@@ -4,6 +4,7 @@ import me.darrionat.commandcooldown.CommandCooldownPlugin;
 import me.darrionat.commandcooldown.cooldowns.Cooldown;
 import me.darrionat.commandcooldown.cooldowns.SavedCommand;
 import me.darrionat.commandcooldown.gui.CooldownEditorGui;
+import me.darrionat.pluginlib.utils.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -28,14 +29,14 @@ public class CreateCooldownTask extends DurationTask {
     @Override
     public String promptText() {
         if (args == null)
-            return "Enter command arguments";
+            return Utils.chat("&aEnter command arguments");
         return super.promptText();
     }
 
     @Override
     public String onFail() {
         if (args == null)
-            return "Provide command arguments (excluding the label)";
+            return Utils.chat("&cProvide command arguments (excluding the label)");
         return super.onFail();
     }
 

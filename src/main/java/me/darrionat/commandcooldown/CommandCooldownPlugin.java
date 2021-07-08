@@ -3,6 +3,7 @@ package me.darrionat.commandcooldown;
 import me.darrionat.commandcooldown.commands.CommandCooldownCommand;
 import me.darrionat.commandcooldown.cooldowns.Cooldown;
 import me.darrionat.commandcooldown.cooldowns.SavedCommand;
+import me.darrionat.commandcooldown.gui.AliasesEditorGui;
 import me.darrionat.commandcooldown.gui.CommandEditorGui;
 import me.darrionat.commandcooldown.gui.CooldownEditorGui;
 import me.darrionat.commandcooldown.gui.CooldownsGui;
@@ -114,9 +115,7 @@ public class CommandCooldownPlugin extends Plugin {
      * @param page    The page of the menu to open.
      */
     public void openCommandEditor(Player p, SavedCommand command, int page) {
-        SavedCommand configCommand = getCommandService().getCommand(command.getLabel());
-        Gui gui = new CommandEditorGui(this, configCommand, page);
-        openMenu(p, gui);
+        openMenu(p, new CommandEditorGui(this, command, page));
     }
 
     /**
@@ -126,12 +125,14 @@ public class CommandCooldownPlugin extends Plugin {
      * @param cooldown The cooldown to be edited.
      */
     public void openCooldownEditor(Player p, Cooldown cooldown) {
-        Gui gui = new CooldownEditorGui(this, cooldown);
-        openMenu(p, gui);
+        openMenu(p, new CooldownEditorGui(this, cooldown));
+    }
+
+    public void openAliasesEditor(Player p, SavedCommand command, int page) {
+        openMenu(p, new AliasesEditorGui(this, command, page));
     }
 
     private void openMenu(Player p, Gui gui) {
-        getGuiHandler().registerGui(gui);
         getGuiHandler().openGui(p, gui);
     }
 

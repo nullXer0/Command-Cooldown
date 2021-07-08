@@ -4,6 +4,7 @@ import me.darrionat.commandcooldown.CommandCooldownPlugin;
 import me.darrionat.commandcooldown.cooldowns.Cooldown;
 import me.darrionat.commandcooldown.cooldowns.SavedCommand;
 import me.darrionat.commandcooldown.gui.CommandEditorGui;
+import me.darrionat.pluginlib.utils.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -27,14 +28,14 @@ public class CreateCommandTask extends DurationTask {
     @Override
     public String promptText() {
         if (label == null)
-            return "Enter a command label";
+            return Utils.chat("&aEnter a command label");
         return super.promptText();
     }
 
     @Override
     public String onFail() {
         if (label == null)
-            return "Input must be one word";
+            return Utils.chat("&cInput must be one word");
         return super.onFail();
     }
 

@@ -1,17 +1,17 @@
 package me.darrionat.commandcooldown.cooldowns;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Command {
     private final String label;
-    private final Set<String> aliases;
+    private final List<String> aliases;
 
     public Command(String label) {
-        this(label, new HashSet<>());
+        this(label, new ArrayList<>());
     }
 
-    public Command(String label, Set<String> aliases) {
+    public Command(String label, List<String> aliases) {
         this.label = label;
         this.aliases = aliases;
     }
@@ -50,7 +50,7 @@ public abstract class Command {
      *
      * @return The aliases of the command.
      */
-    public Set<String> getAliases() {
+    public List<String> getAliases() {
         return aliases;
     }
 
