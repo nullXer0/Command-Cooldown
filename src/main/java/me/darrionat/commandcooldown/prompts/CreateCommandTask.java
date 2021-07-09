@@ -22,7 +22,7 @@ public class CreateCommandTask extends DurationTask {
         SavedCommand command = new SavedCommand(label);
         Cooldown baseCooldown = new Cooldown(command, duration);
         commandService.addCooldown(command, baseCooldown);
-        return new CommandEditorGui(plugin, commandService.getCommand(label), 1).getInventory(p);
+        return new CommandEditorGui(plugin, commandService.getCommand(command), 1).getInventory(p);
     }
 
     @Override

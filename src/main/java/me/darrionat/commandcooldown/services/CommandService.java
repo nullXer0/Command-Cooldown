@@ -52,4 +52,9 @@ public class CommandService implements ICommandService {
     public SavedCommand getCommand(String label) {
         return cooldownsRepo.getSavedCommand(label);
     }
+
+    @Override
+    public SavedCommand getCommand(SavedCommand command) {
+        return getCommand(command.getLabel());
+    }
 }

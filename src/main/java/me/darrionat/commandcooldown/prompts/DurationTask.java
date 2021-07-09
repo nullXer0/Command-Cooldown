@@ -35,7 +35,7 @@ public class DurationTask extends Task {
         if (!complete())
             throw new IllegalStateException("Task is not complete");
         commandService.setCooldown(cooldown, duration);
-        SavedCommand command = commandService.getCommand(cooldown.getCommand().getLabel());
+        SavedCommand command = commandService.getCommand(cooldown.getCommand());
         return new CommandEditorGui(plugin, command, 1).getInventory(p);
     }
 

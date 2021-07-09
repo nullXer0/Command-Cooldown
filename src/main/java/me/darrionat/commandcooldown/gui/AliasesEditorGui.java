@@ -37,13 +37,15 @@ public class AliasesEditorGui extends Gui {
             createItem(CommandEditorGui.ALIASES, 1, i, "&f&l/" + alias,
                     "&7Right-Click to delete this alias");
         }
-        // CREATE ALIAS BUTTON
+        // Create Alias Button
         createItem(CooldownsGui.CREATE, 1, CooldownsGui.CREATE_SLOT, "&aCreate Alias",
                 "&7Left-Click to create an alias");
         if (page > 1) // Not on first page
             createItem(CooldownsGui.PAGE_SWITCH, 1, CooldownsGui.PREV_PAGE_SLOT, "&fPrevious Page");
         if (page * CooldownsGui.AMT_PER_PAGE < aliases.size()) // There are more afterwards
             createItem(CooldownsGui.PAGE_SWITCH, 1, CooldownsGui.NEXT_PAGE_SLOT, "&fNext Page");
+        // Go back
+        createItem(CooldownsGui.PAGE_SWITCH, 1, CommandEditorGui.BACK_MENU_SLOT, "&7Go Back");
     }
 
     @Override

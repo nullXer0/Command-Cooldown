@@ -26,7 +26,7 @@ public class CreateAliasTask extends Task {
         if (!complete())
             throw new IllegalStateException("Task is not complete");
         commandService.addAlias(command, label);
-        return new AliasesEditorGui(plugin, commandService.getCommand(label), 1).getInventory(p);
+        return new AliasesEditorGui(plugin, commandService.getCommand(command), 1).getInventory(p);
     }
 
     @Override

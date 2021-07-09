@@ -13,8 +13,6 @@ import org.bukkit.event.inventory.ClickType;
 public class CooldownEditorGui extends Gui {
     private final static XMaterial CHANGE_COOLDOWN_MATERIAL = XMaterial.YELLOW_WOOL;
     private final static int CHANGE_COOLDOWN_SLOT = 31; // Center slot
-    // The slot for the item to go back to the main menu
-    private final static int BACK_MENU_SLOT = CooldownsGui.CREATE_SLOT - 1;
 
     private final CommandCooldownPlugin plugin;
     private final Cooldown cooldown;
@@ -32,7 +30,7 @@ public class CooldownEditorGui extends Gui {
         createItem(CHANGE_COOLDOWN_MATERIAL, 1, CHANGE_COOLDOWN_SLOT, "&eChange Cooldown",
                 "&7Current Duration: &a" + duration + "&7(s)");
         // Go back item
-        createItem(CooldownsGui.PAGE_SWITCH, 1, BACK_MENU_SLOT, "&cGo Back");
+        createItem(CooldownsGui.PAGE_SWITCH, 1, CommandEditorGui.BACK_MENU_SLOT, "&7Go Back");
     }
 
     @Override
@@ -40,7 +38,7 @@ public class CooldownEditorGui extends Gui {
         if (slot == CHANGE_COOLDOWN_SLOT) {
             Prompt prompt = new ChatPrompt(new DurationTask(plugin, cooldown, p));
             prompt.openPrompt();
-        } else if (slot == BACK_MENU_SLOT) {
+        } else if (slot == CommandEditorGui.BACK_MENU_SLOT) {
             plugin.openCommandEditor(p, cooldown.getCommand(), 1);
         }
     }
