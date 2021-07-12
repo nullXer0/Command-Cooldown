@@ -13,8 +13,10 @@ import java.util.Set;
 
 public class ChatPromptListener implements Listener {
     private static final Set<Task> ACTIVE_TASKS = new HashSet<>();
+    private final CommandCooldownPlugin plugin;
 
     public ChatPromptListener(CommandCooldownPlugin plugin) {
+        this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
@@ -66,7 +68,7 @@ public class ChatPromptListener implements Listener {
             return;
         }
         if (task.complete()) {
-            p.openInventory(task.run());
+            Bukkit.getScheduler().runTask(plugin, () -> p.openInventory(task.run()));
             ACTIVE_TASKS.remove(task);
         } else
             p.sendMessage(Utils.chat(task.promptText()));
