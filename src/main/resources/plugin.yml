@@ -2,6 +2,7 @@ name: CommandCooldown
 main: me.darrionat.commandcooldown.CommandCooldownPlugin
 description: An easy way to add cooldowns to commands
 version: 2.3.4
+api-version: 1.16
 
 commands:
   commandcooldown:
