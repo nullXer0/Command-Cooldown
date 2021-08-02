@@ -28,9 +28,9 @@ public class PlayerJoin implements Listener {
 
         plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, () -> {
             if (!updater.updateAvailable()) return;
-            p.sendMessage(Utils.chat("&eUpdate available! &b" + plugin.getName() + " is currently on " + plugin.getDescription().getVersion()));
-            p.sendMessage(Utils.chat("&bDownload the newest version here!"));
-            p.sendMessage(Utils.chat(updater.getResourceURL()));
+            p.sendMessage(Utils.toColor("&eUpdate available! &b" + plugin.getName() + " is currently on " + plugin.getDescription().getVersion()));
+            p.sendMessage(Utils.toColor("&bDownload the newest version here!"));
+            p.sendMessage(Utils.toColor(updater.getResourceURL()));
         }, 30L);// 30 ticks delay
 
     }

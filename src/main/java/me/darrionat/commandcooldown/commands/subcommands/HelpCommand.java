@@ -52,6 +52,6 @@ public class HelpCommand extends SubCommand {
         if (page > pagesAmount || page < 1) page = 1;
         messageService.sendHelpHeader(sender, page, pagesAmount);
         for (int i = page * 5 - 5; i <= (page * 5 - 1) && i < list.size(); i++)
-            sender.sendMessage(Utils.chat(" " + list.get(i)));
+            sender.sendMessage(Utils.toColor(" " + list.get(i)));
     }
 }

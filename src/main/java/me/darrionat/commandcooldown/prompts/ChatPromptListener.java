@@ -64,13 +64,13 @@ public class ChatPromptListener implements Listener {
 
         String text = e.getMessage();
         if (!task.valid(text)) {
-            p.sendMessage(Utils.chat(task.onFail()));
+            p.sendMessage(Utils.toColor(task.onFail()));
             return;
         }
         if (task.complete()) {
             Bukkit.getScheduler().runTask(plugin, () -> p.openInventory(task.run()));
             ACTIVE_TASKS.remove(task);
         } else
-            p.sendMessage(Utils.chat(task.promptText()));
+            p.sendMessage(Utils.toColor(task.promptText()));
     }
 }

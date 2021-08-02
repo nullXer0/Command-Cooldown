@@ -96,6 +96,6 @@ public class MessageService implements IMessageService {
     @Override
     public void sendMessage(CommandSender sender, String message) {
         Objects.requireNonNull(message);
-        sender.sendMessage(Utils.chat(message));
+        sender.sendMessage(Utils.toColor(message));
     }
 }

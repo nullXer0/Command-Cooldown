@@ -8,7 +8,6 @@ import me.darrionat.commandcooldown.prompts.ChatPrompt;
 import me.darrionat.commandcooldown.prompts.CreateCooldownTask;
 import me.darrionat.commandcooldown.prompts.Prompt;
 import me.darrionat.pluginlib.guis.Gui;
-import me.darrionat.pluginlib.utils.Utils;
 import me.darrionat.shaded.xseries.XMaterial;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -22,10 +21,10 @@ public class CommandEditorGui extends Gui {
     public final static int BASE_COOLDOWN_SLOT = 0;
     public final static int BACK_MENU_SLOT = CooldownsGui.CREATE_SLOT - 1;
     public final static int ALIASES_SLOT = BACK_MENU_SLOT - 1;
+    public static final XMaterial ALIASES = XMaterial.OAK_SIGN;
     private static final XMaterial BASE_COOLDOWN_MATERIAL = XMaterial.GREEN_WOOL;
     private static final XMaterial NO_BASE_COOLDOWN_MATERIAL = XMaterial.RED_WOOL;
     private static final XMaterial COOLDOWN = XMaterial.LIME_WOOL;
-    public static final XMaterial ALIASES = XMaterial.OAK_SIGN;
     private final CommandCooldownPlugin plugin;
     private final SavedCommand command;
     private final int page;
@@ -54,13 +53,10 @@ public class CommandEditorGui extends Gui {
         }
         // Show cooldowns
         List<Cooldown> cooldowns = command.getCooldowns();
-        p.sendMessage(Utils.chat("&bCreating GUI"));
-        p.sendMessage("List size: " + cooldowns.size());
 
         int pageDiff = (page - 1) * AMT_PER_PAGE;
         for (int i = 1; i < AMT_PER_PAGE && i + pageDiff < cooldowns.size(); i++) {
             Cooldown cooldown = cooldowns.get(i);
-            p.sendMessage(cooldown.toCommandString());
             if (cooldown.equals(base)) continue;
             double duration = cooldown.getDuration();
             createItem(COOLDOWN, 1, i,

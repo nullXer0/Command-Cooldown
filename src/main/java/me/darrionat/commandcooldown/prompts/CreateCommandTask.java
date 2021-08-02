@@ -28,14 +28,14 @@ public class CreateCommandTask extends DurationTask {
     @Override
     public String promptText() {
         if (label == null)
-            return Utils.chat("&aEnter a command label");
+            return Utils.toColor("&aEnter a command label");
         return super.promptText();
     }
 
     @Override
     public String onFail() {
         if (label == null)
-            return Utils.chat("&cInput must be one word");
+            return Utils.toColor("&cInput must be one word");
         return super.onFail();
     }
 

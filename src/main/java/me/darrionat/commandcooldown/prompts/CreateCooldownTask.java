@@ -29,14 +29,14 @@ public class CreateCooldownTask extends DurationTask {
     @Override
     public String promptText() {
         if (args == null)
-            return Utils.chat("&aEnter command arguments");
+            return Utils.toColor("&aEnter command arguments");
         return super.promptText();
     }
 
     @Override
     public String onFail() {
         if (args == null)
-            return Utils.chat("&cProvide command arguments (excluding the label)");
+            return Utils.toColor("&cProvide command arguments (excluding the label)");
         return super.onFail();
     }
 

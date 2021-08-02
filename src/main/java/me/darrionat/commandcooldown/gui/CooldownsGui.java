@@ -5,7 +5,7 @@ import me.darrionat.commandcooldown.cooldowns.SavedCommand;
 import me.darrionat.commandcooldown.prompts.ChatPrompt;
 import me.darrionat.commandcooldown.prompts.CreateCommandTask;
 import me.darrionat.commandcooldown.prompts.Prompt;
-import me.darrionat.pluginlib.guis.Gui;
+import me.darrionat.pluginlib.guis.AnimatedGui;
 import me.darrionat.shaded.xseries.XMaterial;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * The default menu for the plugin.
  */
-public class CooldownsGui extends Gui {
+public class CooldownsGui extends AnimatedGui {
     public final static XMaterial CREATE = XMaterial.GREEN_WOOL;
     public final static XMaterial FILLER = XMaterial.BLACK_STAINED_GLASS_PANE;
     public final static XMaterial PAGE_SWITCH = XMaterial.ARROW;

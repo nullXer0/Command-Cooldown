@@ -31,12 +31,12 @@ public class CreateAliasTask extends Task {
 
     @Override
     public String promptText() {
-        return Utils.chat("&aEnter an alternative label for the command");
+        return Utils.toColor("&aEnter an alternative label for the command");
     }
 
     @Override
     public String onFail() {
-        return Utils.chat("&cAn alias must only be one word");
+        return Utils.toColor("&cAn alias must only be one word");
     }
 
     @Override

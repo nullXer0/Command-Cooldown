@@ -41,12 +41,12 @@ public class DurationTask extends Task {
 
     @Override
     public String promptText() {
-        return Utils.chat("&aEnter a duration (s/m/h/d/w/y)");
+        return Utils.toColor("&aEnter a duration (s/m/h/d/w/y)");
     }
 
     @Override
     public String onFail() {
-        return Utils.chat("&cInvalid duration");
+        return Utils.toColor("&cInvalid duration");
     }
 
     @Override
