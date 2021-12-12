@@ -154,6 +154,15 @@ public class CommandCooldownPlugin extends Plugin {
         cooldownsRepo.addCommandCooldown(command);
     }
 
+    /**
+     * Resets all cooldowns for a specific player.
+     *
+     * @param target The player
+     */
+    public void removePlayerCooldowns(Player target) {
+        cooldownService.removePlayerCooldowns(target);
+    }
+
     public ICommandService getCommandService() {
         return Bootstrapper.getBootstrapper().getCommandService();
     }

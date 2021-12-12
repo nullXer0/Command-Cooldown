@@ -98,6 +98,8 @@ public class Cooldown {
         if (!(obj instanceof Cooldown))
             return false;
         Cooldown b = (Cooldown) obj;
-        return command.equals(b.command) && args.equals(b.args) && duration == b.duration;
+        // Does not check cooldown because there should only be one that exists anyways
+        // and this fixes an issue with permissions
+        return command.equals(b.command) && args.equals(b.args);
     }
 }

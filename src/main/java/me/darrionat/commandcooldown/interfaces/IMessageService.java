@@ -40,5 +40,7 @@ public interface IMessageService extends Service {
 
     void sendHelpHeader(CommandSender sender, int page, int pagesAmount);
 
+    void sendResetMessage(CommandSender sender, Player target);
+
     void sendMessage(CommandSender sender, String message);
 }

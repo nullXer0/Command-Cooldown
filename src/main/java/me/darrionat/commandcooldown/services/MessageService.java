@@ -94,6 +94,13 @@ public class MessageService implements IMessageService {
     }
 
     @Override
+    public void sendResetMessage(CommandSender sender, Player target) {
+        String msg = messageRepo.getMessage("resetCooldowns");
+        msg = msg.replace("%player%", target.getName());
+        sendMessage(sender, msg);
+    }
+
+    @Override
     public void sendMessage(CommandSender sender, String message) {
         Objects.requireNonNull(message);
         sender.sendMessage(Utils.toColor(message));

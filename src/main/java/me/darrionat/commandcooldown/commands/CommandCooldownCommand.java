@@ -1,10 +1,7 @@
 package me.darrionat.commandcooldown.commands;
 
 import me.darrionat.commandcooldown.CommandCooldownPlugin;
-import me.darrionat.commandcooldown.commands.subcommands.BypassCommand;
-import me.darrionat.commandcooldown.commands.subcommands.EditorCommand;
-import me.darrionat.commandcooldown.commands.subcommands.HelpCommand;
-import me.darrionat.commandcooldown.commands.subcommands.ReloadCommand;
+import me.darrionat.commandcooldown.commands.subcommands.*;
 import me.darrionat.commandcooldown.interfaces.IBypassService;
 import me.darrionat.commandcooldown.interfaces.IMessageService;
 import me.darrionat.pluginlib.commands.BaseCommand;
@@ -21,6 +18,7 @@ public class CommandCooldownCommand extends BaseCommand {
         addSubCommand(new ReloadCommand(this, plugin, messageService));
         addSubCommand(new HelpCommand(this, plugin, messageService));
         addSubCommand(new BypassCommand(this, plugin, bypassService, messageService));
+        addSubCommand(new RemoveCooldownsCommand(this, plugin, messageService));
     }
 
     @Override

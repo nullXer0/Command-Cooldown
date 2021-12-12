@@ -21,6 +21,13 @@ public interface ICooldownService extends Service {
     void giveCooldown(Player p, Cooldown cooldown);
 
     /**
+     * Removes all cooldowns from a specified player.
+     *
+     * @param p The player
+     */
+    void removePlayerCooldowns(Player p);
+
+    /**
      * Gets the player's remaining cooldown for a particular command in seconds.
      *
      * @param p        the player.

@@ -15,7 +15,7 @@ public class CommandService implements ICommandService {
     @Override
     public void addAlias(SavedCommand command, String alias) {
         cooldownsRepo.removeCommandCooldown(command);
-        command.addAlias(alias);
+        command.addAlias(alias.toLowerCase());
         cooldownsRepo.addCommandCooldown(command);
     }
 

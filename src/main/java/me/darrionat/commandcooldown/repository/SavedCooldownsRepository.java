@@ -46,7 +46,8 @@ public class SavedCooldownsRepository implements ISavedCooldownsRepository {
 
         Set<String> set = new HashSet<>();
         for (PlayerCooldown cd : cooldownList)
-            set.add(cd.toString());
+            if (!cd.expired())
+                set.add(cd.toString());
 
         List<String> toSave = Arrays.asList(set.toArray(new String[0]));
         file.set(LIST_NAME, toSave);
@@ -71,7 +72,9 @@ public class SavedCooldownsRepository implements ISavedCooldownsRepository {
 
             SavedCommand command = new SavedCommand(label);
             Cooldown cooldown = new Cooldown(command, argsStr, duration);
-            toReturn.add(new PlayerCooldown(uuid, cooldown, end));
+            PlayerCooldown playerCd = new PlayerCooldown(uuid, cooldown, end);
+            if (!playerCd.expired())
+                toReturn.add(playerCd);
         }
         return toReturn;
     }
