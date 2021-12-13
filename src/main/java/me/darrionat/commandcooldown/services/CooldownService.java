@@ -33,7 +33,7 @@ public class CooldownService implements ICooldownService {
     @Override
     public Cooldown parseCooldown(String s) {
         // take into account "warp shop a aa a"
-        String[] message = s.split(" ");
+        String[] message = s.toLowerCase().split(" ");
         String label = message[0];
         List<String> args = new ArrayList<>(Arrays.asList(message));
         // Remove label
