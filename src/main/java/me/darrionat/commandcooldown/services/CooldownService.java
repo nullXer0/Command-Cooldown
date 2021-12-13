@@ -139,17 +139,13 @@ public class CooldownService implements ICooldownService {
         String label = cooldown.getCommand().getLabel();
         // If it's a base cooldown, command perm is just the label.
         String commandPerm = cooldown.isBaseCooldown() ? label : label + "_" + String.join("_", cooldown.getArgs());
-        System.out.println("Command Perm: " + "commandcooldown." + commandPerm);
         for (PermissionAttachmentInfo pai : p.getEffectivePermissions()) {
             String permission = pai.getPermission();
-            System.out.println("Player Perm: " + permission);
             if (!permission.contains("commandcooldown." + commandPerm)) continue;
             // Only the duration
             String timeString = permission.replace("commandcooldown." + commandPerm + ".", "");
             try {
                 clone.setDuration(Double.parseDouble(timeString));
-                System.out.println("Clone duration: " + clone.getDuration());
-                System.out.println("Clone String: " + clone.toCommandString());
                 return clone;
             } catch (NumberFormatException ignored) {
             }
@@ -178,8 +174,6 @@ public class CooldownService implements ICooldownService {
 
     private PlayerCooldown getPlayerCooldown(Player p, Cooldown cooldown) {
         UUID uuid = p.getUniqueId();
-        String label = cooldown.getCommand().getLabel();
-        List<String> args = cooldown.getArgs();
         for (PlayerCooldown playerCooldown : cooldowns) {
             Cooldown cd = playerCooldown.getCooldown();
             if (playerCooldown.getPlayer().equals(uuid) &&
