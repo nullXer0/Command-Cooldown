@@ -139,19 +139,27 @@ public class CooldownService implements ICooldownService {
         String label = cooldown.getCommand().getLabel();
         // If it's a base cooldown, command perm is just the label.
         String commandPerm = cooldown.isBaseCooldown() ? label : label + "_" + String.join("_", cooldown.getArgs());
+        double lowestDuration = -1;
         for (PermissionAttachmentInfo pai : p.getEffectivePermissions()) {
             String permission = pai.getPermission();
             if (!permission.contains("commandcooldown." + commandPerm)) continue;
             // Only the duration
             String timeString = permission.replace("commandcooldown." + commandPerm + ".", "");
             try {
-                clone.setDuration(Double.parseDouble(timeString));
-                return clone;
+                double duration = Double.parseDouble(timeString);
+                if (lowestDuration == -1)
+                    lowestDuration = duration;
+                else if (duration < lowestDuration)
+                    lowestDuration = duration;
             } catch (NumberFormatException ignored) {
             }
         }
         // No new cooldown
-        return cooldown;
+        if (lowestDuration == -1)
+            return cooldown;
+
+        clone.setDuration(lowestDuration);
+        return clone;
     }
 
     @Override
