@@ -9,6 +9,7 @@ import me.darrionat.commandcooldown.interfaces.IMessageService;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
@@ -26,7 +27,7 @@ public class PlayerCommandPreprocess implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onSentCommand(PlayerCommandPreprocessEvent e) {
         String message = e.getMessage().replaceFirst("/", "");
         Cooldown cooldown = cooldownService.parseCooldown(message);
