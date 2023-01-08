@@ -62,6 +62,7 @@ public class ChatPromptListener implements Listener {
 
         Task task = getPlayerTask(p);
         if (task == null) return;
+        e.setCancelled(true);
 
         String text = ChatColor.stripColor(e.getMessage());
         if (!task.valid(text)) {
