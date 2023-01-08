@@ -47,6 +47,9 @@ public class Duration {
     }
 
     public static String toDurationString(double seconds) {
+        if(seconds < 1)
+            return "0s";
+
         int d = (int) Math.floor(seconds / 86400);
         int h = (int) Math.floor(seconds % 86400 / 3600);
         int m = (int) Math.floor(seconds % 3600 / 60);
